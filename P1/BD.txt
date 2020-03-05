@@ -1,0 +1,16 @@
+drop DATABASE IF EXISTS p1;
+
+CREATE DATABASE p1;
+
+USE p1;
+
+DROP TABLE IF EXISTS preguntas;
+
+CREATE TABLE preguntas (
+	pre_id INT AUTO_INCREMENT PRIMARY KEY,
+    pregunta VARCHAR(100)
+);
+
+insert into preguntas values(NULL,'¿Eres maricon?');
+insert into preguntas values(NULL,'¿Hola?');
+insert into preguntas values(NULL,'¿Estas viendo porno solo?');

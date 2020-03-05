@@ -212,16 +212,13 @@
 		</tr>
 	</table>
 	<br>
-
-	<table border="1">
+	<table border="1" align="right">
 		<tr align="center">
-			<td></td>
 			<td>CÓD.PROF.1</td>
 			<td>CÓD.PROF.2</td>
 			<td>CÓD.PROF.3</td>
 		</tr>
 		<tr align="center">
-			<td></td>
 			<td>
 				<input type="radio" name="prof1-1">1
 				<input type="radio" name="prof1-2">1
@@ -361,258 +358,35 @@
 				<input type="radio" name="prof3-4">9
 			</td>
 		</tr>
-		<tr>
-			<td>
-				<b>PLANIFICACIÓN DE LA ENSEÑANZA Y APRENDIZAJE</b>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				1. El/la profesor/a informa sobre los distintos aspectos de la guía docente o programa de la asignatura (objetivos, actividades, contenidos del temario, metodología, bibliografía, sistemas de evaluación, ...)
-			</td>
-			<td  width="210">
-				<input type="radio" name="p1prof1">NS
-				<input type="radio" name="p1prof1">1
-				<input type="radio" name="p1prof1">2
-				<input type="radio" name="p1prof1">3
-				<input type="radio" name="p1prof1">4
-				<input type="radio" name="p1prof1">5
-			</td>
-			<td width="210">
-				<input type="radio" name="p1prof2">NS
-				<input type="radio" name="p1prof2">1
-				<input type="radio" name="p1prof2">2
-				<input type="radio" name="p1prof2">3
-				<input type="radio" name="p1prof2">4
-				<input type="radio" name="p1prof2">5
-			</td>
-			<td width="210">
-				<input type="radio" name="p1prof3">NS
-				<input type="radio" name="p1prof3">1
-				<input type="radio" name="p1prof3">2
-				<input type="radio" name="p1prof3">3
-				<input type="radio" name="p1prof3">4
-				<input type="radio" name="p1prof3">5
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<b>DESARROLLO DE LA DOCENCIA</b>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<b>Cumplimiento de las obligaciones docentes (del encargo docente)</b>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				2. Imparte las clases en el horario fijado
-			</td>
-			<td>
-				<input type="radio" name="p2prof1">NS
-				<input type="radio" name="p2prof1">1
-				<input type="radio" name="p2prof1">2
-				<input type="radio" name="p2prof1">3
-				<input type="radio" name="p2prof1">4
-				<input type="radio" name="p2prof1">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof2">NS
-				<input type="radio" name="p2prof2">1
-				<input type="radio" name="p2prof2">2
-				<input type="radio" name="p2prof2">3
-				<input type="radio" name="p2prof2">4
-				<input type="radio" name="p2prof2">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof3">NS
-				<input type="radio" name="p2prof3">1
-				<input type="radio" name="p2prof3">2
-				<input type="radio" name="p2prof3">3
-				<input type="radio" name="p2prof3">4
-				<input type="radio" name="p2prof3">5
-			</td>
-		</tr>
-		<tr>
-			<td>
-				3. Asiste regularmente a clase
-			</td>
-			<td>
-				<input type="radio" name="p2prof1">NS
-				<input type="radio" name="p2prof1">1
-				<input type="radio" name="p2prof1">2
-				<input type="radio" name="p2prof1">3
-				<input type="radio" name="p2prof1">4
-				<input type="radio" name="p2prof1">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof2">NS
-				<input type="radio" name="p2prof2">1
-				<input type="radio" name="p2prof2">2
-				<input type="radio" name="p2prof2">3
-				<input type="radio" name="p2prof2">4
-				<input type="radio" name="p2prof2">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof3">NS
-				<input type="radio" name="p2prof3">1
-				<input type="radio" name="p2prof3">2
-				<input type="radio" name="p2prof3">3
-				<input type="radio" name="p2prof3">4
-				<input type="radio" name="p2prof3">5
-			</td>
-		</tr>
-		<tr>
-			<td>
-				4. Cumple adecuadamente su labor de tutoría (presencial o virtual)
-			</td>
-			<td>
-				<input type="radio" name="p2prof1">NS
-				<input type="radio" name="p2prof1">1
-				<input type="radio" name="p2prof1">2
-				<input type="radio" name="p2prof1">3
-				<input type="radio" name="p2prof1">4
-				<input type="radio" name="p2prof1">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof2">NS
-				<input type="radio" name="p2prof2">1
-				<input type="radio" name="p2prof2">2
-				<input type="radio" name="p2prof2">3
-				<input type="radio" name="p2prof2">4
-				<input type="radio" name="p2prof2">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof3">NS
-				<input type="radio" name="p2prof3">1
-				<input type="radio" name="p2prof3">2
-				<input type="radio" name="p2prof3">3
-				<input type="radio" name="p2prof3">4
-				<input type="radio" name="p2prof3">5
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<b>Cumplimiento de la Planificación</b>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				5. Se ajusta a la planificación de la asignatura
-			</td>
-			<td>
-				<input type="radio" name="p2prof1">NS
-				<input type="radio" name="p2prof1">1
-				<input type="radio" name="p2prof1">2
-				<input type="radio" name="p2prof1">3
-				<input type="radio" name="p2prof1">4
-				<input type="radio" name="p2prof1">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof2">NS
-				<input type="radio" name="p2prof2">1
-				<input type="radio" name="p2prof2">2
-				<input type="radio" name="p2prof2">3
-				<input type="radio" name="p2prof2">4
-				<input type="radio" name="p2prof2">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof3">NS
-				<input type="radio" name="p2prof3">1
-				<input type="radio" name="p2prof3">2
-				<input type="radio" name="p2prof3">3
-				<input type="radio" name="p2prof3">4
-				<input type="radio" name="p2prof3">5
-			</td>
-		</tr>
-		<tr>
-			<td>
-				6. Se han coordinado las actividades teóricas y prácticas previstas
-			</td>
-			<td>
-				<input type="radio" name="p2prof1">NS
-				<input type="radio" name="p2prof1">1
-				<input type="radio" name="p2prof1">2
-				<input type="radio" name="p2prof1">3
-				<input type="radio" name="p2prof1">4
-				<input type="radio" name="p2prof1">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof2">NS
-				<input type="radio" name="p2prof2">1
-				<input type="radio" name="p2prof2">2
-				<input type="radio" name="p2prof2">3
-				<input type="radio" name="p2prof2">4
-				<input type="radio" name="p2prof2">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof3">NS
-				<input type="radio" name="p2prof3">1
-				<input type="radio" name="p2prof3">2
-				<input type="radio" name="p2prof3">3
-				<input type="radio" name="p2prof3">4
-				<input type="radio" name="p2prof3">5
-			</td>
-		</tr>
-		<tr>
-			<td>
-				7. Se ajusta a los sistemas de evaluación especificados en la guía decente/programada de la asignatura
-			</td>
-			<td>
-				<input type="radio" name="p2prof1">NS
-				<input type="radio" name="p2prof1">1
-				<input type="radio" name="p2prof1">2
-				<input type="radio" name="p2prof1">3
-				<input type="radio" name="p2prof1">4
-				<input type="radio" name="p2prof1">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof2">NS
-				<input type="radio" name="p2prof2">1
-				<input type="radio" name="p2prof2">2
-				<input type="radio" name="p2prof2">3
-				<input type="radio" name="p2prof2">4
-				<input type="radio" name="p2prof2">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof3">NS
-				<input type="radio" name="p2prof3">1
-				<input type="radio" name="p2prof3">2
-				<input type="radio" name="p2prof3">3
-				<input type="radio" name="p2prof3">4
-				<input type="radio" name="p2prof3">5
-			</td>
-		</tr>
-		<tr>
-			<td>
-				8. La bibliografía y otras fuentes de información recomendadas en el programa son útiles para el aprendizaje de la asignatura
-			</td>
-			<td>
-				<input type="radio" name="p2prof1">NS
-				<input type="radio" name="p2prof1">1
-				<input type="radio" name="p2prof1">2
-				<input type="radio" name="p2prof1">3
-				<input type="radio" name="p2prof1">4
-				<input type="radio" name="p2prof1">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof2">NS
-				<input type="radio" name="p2prof2">1
-				<input type="radio" name="p2prof2">2
-				<input type="radio" name="p2prof2">3
-				<input type="radio" name="p2prof2">4
-				<input type="radio" name="p2prof2">5
-			</td>
-			<td>
-				<input type="radio" name="p2prof3">NS
-				<input type="radio" name="p2prof3">1
-				<input type="radio" name="p2prof3">2
-				<input type="radio" name="p2prof3">3
-				<input type="radio" name="p2prof3">4
-				<input type="radio" name="p2prof3">5
-			</td>
-		</tr>
-	</table>
+	<?php
+		$dbhost = '127.0.0.1';
+		$dbuser = 'usuario';
+		$dbpass = '1234';
+		$db = 'p1';
+		$port = '3308';
+		$conexion = mysqli_connect($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
+		$res = mysqli_query($conexion,"SELECT * FROM preguntas") or die ("Fallo consulta tabla");
+		echo "<table border=1 align=right";
+		$i = 1;
+		while ($row = mysqli_fetch_assoc($res)){
+			echo "<tr>";
+				echo "<td>";
+					echo $i.". ".$row['pregunta']."<br>";
+				echo "</td>";
+				for($j = 0; $j < 3; $j++){
+					echo "<td  width=210>";
+					echo "<input type=radio name=p1prof1>NS";
+					echo "<input type=radio name=p1prof1>1";
+					echo "<input type=radio name=p1prof1>2";
+					echo "<input type=radio name=p1prof1>3";
+					echo "<input type=radio name=p1prof1>4";
+					echo "<input type=radio name=p1prof1>5";
+					echo "</td>";
+				}
+			echo "</tr>";
+			$i++;
+		}
+		echo "</table>";
+	?>
 </body>
 </html>
