@@ -145,12 +145,12 @@
 		<br>
 		<?php
 		$dbhost = '127.0.0.1';
-		$dbuser = 'usuario';
-		$dbpass = '1234';
+		$dbuser = 'root';
+		$dbpass = 'root';
 		$db = 'p1';
-		$port = '3308';
+		$port = '8889';
 
-		$conexion = mysqli_connect($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
+		$conexion = mysqli_connect('127.0.0.1', $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
 		$res = mysqli_query($conexion,"SELECT * FROM preguntas") or die ("Fallo consulta tabla");
 		?>
 		<table border="1" align="center">
