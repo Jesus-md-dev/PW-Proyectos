@@ -32,7 +32,7 @@ CREATE TABLE Asignatura (
 
 CREATE TABLE Pregunta (
     cod_preg tinyint auto_increment primary key,
-    enunciado varchar(200)
+    enunciado tinytext(255)
 )
 
 CREATE TABLE Profesor (
