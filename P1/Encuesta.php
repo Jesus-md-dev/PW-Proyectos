@@ -5,8 +5,25 @@
 	<title>Encuesta ESI</title>
 </head>
 <body>
+	<?php
+	if($_POST){
+		if($_POST['color']=="Dark")
+		{
+			echo "<body bgcolor=black>";
+			echo "<font color=white>";
+		}
+		else
+		{
+			echo "<body bgcolor=white>";
+			echo "<font color=black>";
+		}
+	} 
+	?>
+	<form action = "<?php $_PHP_SELF ?>" method = "post"> 
+		<input type = "submit" name = "color" value = "Dark">
+		<input type = "submit" name = "color" value = "Light">
+	</form>
 	<form method=post action=Resultados.php>
-		
 		<table align=center border = 1>
 			<tr align=center>
 				<td colspan=3>
@@ -24,10 +41,12 @@
 			<?php
 			for($j = 1;$j <= 3;$j++){
 				echo "<td>";
-				for($i = 1;$i <= 9;$i++){
-					for($k = 1;$k <= 4;$k++){
+				for($i = 0;$i <= 9;$i++){
+					$k = 5 - $j;
+					while($k!=0){
 						$n = "pro".$j."cod".$k;
 						echo "<input type=radio name=$n value=$i>$i";
+						$k--;
 					}
 					echo "<br>";
 				}
@@ -46,77 +65,77 @@
 				<td>
 					<ul>
 						<li>Edad(años): 
-						<input type="radio" name="edad" value="1"><=19
-						<input type="radio" name="edad" value="2">20-21
-						<input type="radio" name="edad" value="3">22-23
-						<input type="radio" name="edad" value="4">24-25
-						<input type="radio" name="edad" value="5">>25
+							<input type="radio" name="edad" value="1"><=19
+							<input type="radio" name="edad" value="2">20-21
+							<input type="radio" name="edad" value="3">22-23
+							<input type="radio" name="edad" value="4">24-25
+							<input type="radio" name="edad" value="5">>25
 						</li>
 						<br>
 						<li>Sexo: 
-						<input type="radio" name="sexo" value="1">Hombre
-						<input type="radio" name="sexo" value="2">Mujer
+							<input type="radio" name="sexo" value="1">Hombre
+							<input type="radio" name="sexo" value="2">Mujer
 						</li>
 						<br>
 						<li>Curso más alto en el que están matriculado:
-						<?php
-						for($i = 1; $i <= 6; $i++){
-							$n=$i."º";
-							echo "<input type=radio name=calto value=$i>$n";
-						}
-						?>
+							<?php
+							for($i = 1; $i <= 6; $i++){
+								$n=$i."º";
+								echo "<input type=radio name=calto value=$i>$n";
+							}
+							?>
 						</li>
 						<br>
 						<li>Curso más bajo en el que están matriculado:
-						<?php
-						for($i = 1; $i <= 6; $i++){
-							$n=$i."º";
-							echo "<input type=radio name=cbajo value=$i>$n";
-						}
-						?>
+							<?php
+							for($i = 1; $i <= 6; $i++){
+								$n=$i."º";
+								echo "<input type=radio name=cbajo value=$i>$n";
+							}
+							?>
 						</li>
 						<br>
 						<li>Veces que te has examinado en esta asignatura: 
-						<input type="radio" name="vex">1
-						<input type="radio" name="vex">2
-						<input type="radio" name="vex">3
-						<input type="radio" name="vex">>3
+							<input type="radio" name="vexaminado" value="1">1
+							<input type="radio" name="vexaminado" value="2">2
+							<input type="radio" name="vexaminado" value="3">3
+							<input type="radio" name="vexaminado" value="4">>3
 						</li>
 						<br>
 						<li>La asignatura me interesa: 
-						<input type="radio" name="interes">Nada
-						<input type="radio" name="interes">Algo
-						<input type="radio" name="interes">Bastante
-						<input type="radio" name="interes">Mucho
+							<input type="radio" name="interes" value="1">Nada
+							<input type="radio" name="interes" value="2">Algo
+							<input type="radio" name="interes" value="3">Bastante
+							<input type="radio" name="interes" value="4">Mucho
 						</li>
 						<br>
 						<li>Hago uso de las Tutorías: 
-						<input type="radio" name="tutoria">Nada
-						<input type="radio" name="tutoria">Algo
-						<input type="radio" name="tutoria">Bastante
-						<input type="radio" name="tutoria">Mucho
+							<input type="radio" name="tutoria" value="1">Nada
+							<input type="radio" name="tutoria" value="2">Algo
+							<input type="radio" name="tutoria" value="3">Bastante
+							<input type="radio" name="tutoria" value="4">Mucho
 						</li>
 						<br>
 						<li>Dificultad de esta Asignatura: 
-						<input type="radio" name="tutoria">Baja
-						<input type="radio" name="tutoria">Media
-						<input type="radio" name="tutoria">Alta
-						<input type="radio" name="tutoria">Muy alta
+							<input type="radio" name="dificultad" value="1">Baja
+							<input type="radio" name="dificultad" value="2">Media
+							<input type="radio" name="dificultad" value="3">Alta
+							<input type="radio" name="dificultad" value="4">Muy alta
 						</li>
 						<br>
 						<li>Calificación esperada: 
-						<input type="radio" name="tutoria">N.P.
-						<input type="radio" name="tutoria">Sus.
-						<input type="radio" name="tutoria">Apro.
-						<input type="radio" name="tutoria">Not.
-						<input type="radio" name="tutoria">Sobr.
-						<input type="radio" name="tutoria">Mat.Hon.
+							<input type="radio" name="calificacion" value="1">N.P.
+							<input type="radio" name="calificacion" value="2">Sus.
+							<input type="radio" name="calificacion" value="3">Apro.
+							<input type="radio" name="calificacion" value="4">Not.
+							<input type="radio" name="calificacion" value="5">Sobr.
+							<input type="radio" name="calificacion" value="6">Mat.Hon.
 						</li>
 						<br>
 						<li>Asistencia clase (% de horas lectivas): 
-						<input type="radio" name="tutoria">Menos 50%
-						<input type="radio" name="tutoria">Entre 50% y 80%
-						<input type="radio" name="tutoria">Más de 80%
+							<input type="radio" name="asistencia" value="1">Menos 50%
+							<input type="radio" name="asistencia" value="2">Entre 50% y 80%
+							<input type="radio" name="asistencia" value="3">Más de 80%
 						</li>
 						<br>
 					</ul>
@@ -152,7 +171,7 @@
 				<?php
 				for($j = 1;$j <= 3;$j++){
 					echo "<td>";
-					for($i = 1;$i <= 9;$i++){
+					for($i = 0;$i <= 9;$i++){
 						for($k = 1;$k <= 4;$k++){
 							$n = "pro".$j."cod".$k;
 							echo "<input type=radio name=$n value=$i>$i";
