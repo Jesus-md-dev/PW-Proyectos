@@ -150,7 +150,7 @@
 		$db = 'p1';
 		$port = '3308';
 
-		$conexion = mysqli_connect($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
+		$conexion = mysqli_connect('127.0.0.1', $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
 		$res = mysqli_query($conexion,"SELECT * FROM preguntas") or die ("Fallo consulta tabla");
 		?>
 		<table border="1" align="center">
