@@ -4,9 +4,9 @@
 * Change NULL to port number to use DBMS other than the default using port 3306
 *
 */
-$user = 'root';
-$password = 'root'; //To be completed if you have set a password to root
-$database = ''; //To be completed to connect to a database. The database must exist.
+$user = 'usuario';
+$password = '1234'; //To be completed if you have set a password to root
+$database = 'p1'; //To be completed to connect to a database. The database must exist.
 $port = 8889; //Default must be NULL to use default port
 $mysqli = new mysqli('127.0.0.1', $user, $password, $database, $port);
 
