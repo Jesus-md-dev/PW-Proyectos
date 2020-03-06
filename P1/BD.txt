@@ -11,6 +11,13 @@ CREATE TABLE preguntas (
     pregunta VARCHAR(100)
 );
 
+DROP TABLE IF EXISTS num;
+
+CREATE TABLE num (
+    num_id INT AUTO_INCREMENT PRIMARY KEY,
+    string_name VARCHAR(100)
+);
+
 insert into preguntas values(NULL,'¿Eres maricon?');
 insert into preguntas values(NULL,'¿Hola?');
 insert into preguntas values(NULL,'¿Estas viendo porno solo?');
