@@ -95,6 +95,13 @@
 							?>
 						</li>
 						<br>
+						<li>Veces que te has matriculado en esta asignatura: 
+							<input type="radio" name="vmat" value="1">1
+							<input type="radio" name="vmat" value="2">2
+							<input type="radio" name="vmat" value="3">3
+							<input type="radio" name="vmat" value="4">>3
+						</li>
+						<br>
 						<li>Veces que te has examinado en esta asignatura: 
 							<input type="radio" name="vexaminado" value="1">1
 							<input type="radio" name="vexaminado" value="2">2
@@ -151,7 +158,7 @@
 		$port = '3308';
 
 		$conexion = mysqli_connect('127.0.0.1', $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
-		$res = mysqli_query($conexion,"SELECT * FROM preguntas") or die ("Fallo consulta tabla");
+		$res = mysqli_query($conexion,"SELECT * FROM pregunta") or die ("Fallo consulta tabla");
 		?>
 		<table border="1" align="center">
 			<tr align="center">
@@ -187,7 +194,7 @@
 			while ($row = mysqli_fetch_assoc($res)){
 				echo "<tr>";
 					echo "<td>";
-						echo $i.". ".$row['pregunta']."<br>";
+						echo $i.". ".$row['enunciado']."<br>";
 					echo "</td>";
 					for($j = 1; $j <= 3; $j++){
 						echo "<td  width=210>";

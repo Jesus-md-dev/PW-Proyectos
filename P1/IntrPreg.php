@@ -7,12 +7,12 @@
 	<?php
 	if($_POST){
 		$dbhost = '127.0.0.1';
-		$dbuser = 'admin';
-		$dbpass = 'admin';
+		$dbuser = 'root';
+		$dbpass = '';
 		$db = 'p1';
 		$port = '3308';
 		$conexion = mysqli_connect($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
-		mysqli_query($conexion,"INSERT INTO preguntas (pre_id,pregunta) VALUES (NULL,'".$_POST['res']."')") or die ("Fallo Introducir datos a tabla");
+		mysqli_query($conexion,"INSERT INTO pregunta (cod_preg,enunciado) VALUES (NULL,'hola')") or die ("Fallo Introducir datos a tabla");
 	}
 	?>
 	<form method="post" action="IntrPreg.php">
