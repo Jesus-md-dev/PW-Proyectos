@@ -1,0 +1,807 @@
+/*Tema 2*/
+
+/*Ejercicio 1*/
+
+SELECT *
+FROM proveedores;
+
+SELECT *
+FROM tiendas;
+
+SELECT *
+FROM articulos;
+
+SELECT *
+FROM cientes;
+
+SELECT *
+FROM ventas;
+
+SELECT *
+FROM suministros;
+
+SELECT *
+FROM pesos;
+
+ 
+
+/*Ejercicio  2*/
+
+SELECT PRV_NOM
+FROM proveedores;
+
+ 
+
+/*Ejercicio 3*/
+
+SELECT     CLT_NOM,CLT_APELL
+FROM clientes;
+
+ 
+
+/*Ejercicio 4*/
+
+SELECT TDA_GER
+FROM tiendas;
+
+ 
+
+/*Ejercicio 5*/
+
+SELECT TDA_GER,TDA_POB
+FROM tiendas;
+
+ 
+
+/*Ejercicio 6*/
+
+SELECT distinct CLT_POB
+FROM clientes;
+
+ 
+
+/*Ejercicio 7*/
+
+SELECT distinct art_nom
+FROM articulos;
+
+ 
+
+/*Ejercicio 8*/
+
+SELECT distinct art_col
+FROM articulos;
+
+ 
+
+/*Ejercicio 9*/
+
+SELECT distinct CLT_POB "localidad"
+FROM clientes;
+
+ 
+
+/*Ejercicio 10*/
+
+SELECT  *
+FROM clientes
+where clt_pob = 'madrid';
+
+ 
+
+/*Ejercicio 11*/
+
+SELECT *
+FROM articulos
+where art_peso > 500;
+
+ 
+
+/*Ejercicio 12*/
+
+SELECT *
+FROM clientes
+where clt_pais != 'e';
+
+ 
+
+/*Ejercicio 13*/
+
+SELECT *
+FROM articulos
+where art_pv >= (2*art_pc);
+
+
+/*Ejercicio 14*/
+
+SELECT *
+FROM ventas
+where vnt_clt = 1;
+
+ 
+
+/*Ejercicio 15*/
+
+SELECT *
+FROM articulos
+where (art_col = 'rojo') and (art_peso > 200);
+
+ 
+
+/*Ejercicio 16*/
+
+SELECT *
+FROM articulos
+where (art_col = 'rojo') or (art_peso > 500);
+
+/*Ejercicio 17*/
+
+SELECT *
+FROM articulos
+where (art_col != 'rojo') and (art_peso <= 500);
+
+ 
+
+/*Ejercicio 18*/
+
+SELECT *
+FROM articulos
+where ((art_col = 'rojo') and (art_peso > 100)) or (art_col = 'verde');
+
+ 
+
+/*Ejercicio 19*/
+
+SELECT *
+FROM articulos
+where (art_col != 'blanco') and (art_col != 'negro');
+
+ 
+
+/*Ejercicio 20*/
+
+SELECT *
+FROM articulos
+where (art_pc <= '30') and (art_pc >= '20');
+
+ 
+
+/*Ejercicio 21*/
+
+SELECT *
+FROM articulos
+where (art_col is NULL) and (art_peso is NULL);
+
+ 
+
+/*Ejercicio 22*/
+
+SELECT *
+FROM articulos
+where (art_col like 'rojo') or (art_col like 'verde');
+
+ 
+
+/*Ejercicio 23*/
+
+SELECT *
+FROM ventas
+where vnt_fch like 910109;
+
+ 
+
+/*Ejercicio 24*/
+
+SELECT *
+FROM clientes
+where clt_apell like 'ro%';
+
+/*Ejercicio 25*/
+
+select *
+from clientes
+where clt_nom not like 'm%';
+
+/*Ejercicio 26*/
+
+select *
+from clientes
+where clt_apell like 'du___t';
+
+/*Ejercicio 27*/
+
+select *
+from articulos
+where art_col IS NULL;
+
+/*Ejercicio 28*/
+
+select *
+from articulos
+order by art_peso;
+
+/*Ejercicio 29*/
+
+select *
+from tiendas
+order by tda_ger;
+
+/*Ejercicio 30*/
+
+select *
+from articulos
+where art_peso<=100
+order by art_peso;
+
+/*Ejercicio 31*/
+
+select vnt_art
+from ventas
+order by vnt_cant;
+
+/*Ejercicio 32*/
+
+select *
+from ventas
+order by vnt_cant;
+
+/*Ejercicio 33*/
+
+select *
+from articulos
+where art_prv=2;
+
+/*Ejercicio 34*/
+
+select *
+from clientes
+where clt_pob='pamplona';
+
+/*Tema 3*/
+
+/*Ejercicio 1*/
+
+Select (art_pv-art_pc)
+from articulos
+where art_pc > 20;
+
+
+/*Ejercicio 2*/
+
+Select avg(art_peso)
+from articulos;
+
+
+/*Ejercicio 3*/
+
+Select avg(art_peso),max(art_pv-art_pc),(max(art_pv)-min(art_pc))
+from articulos
+where art_col is not NULL;
+
+
+/*Ejercicio 4*/
+
+Select count(distinct art_col)
+from articulos;
+
+/*Ejercicio 5*/
+
+Select count(*)
+from ventas
+group by vnt_tda;
+
+/*Ejercicio 6*/
+
+Select count(distinct prv_num)
+from proveedores;
+
+
+/*Ejercicio 7*/
+
+Select avg(art_pv)
+from articulos
+group by art_col
+order by art_col;
+
+
+/*Ejercicio 8*/
+
+Select avg(art_pv)
+from articulos
+where art_pv>0.6
+group by art_col
+order by art_col;
+
+
+/*Ejercicio 9*/
+
+select art_nom,art_col,count(distinct art_nom)
+from articulos;
+
+/*Ejercicio 10*/
+
+select count(distinct art_col)
+from articulos
+group by art_nom
+having art_nom not like 'impresora'
+order by art_nom;
+
+
+/*Ejercicio 11*/
+
+select art_nom,art_col
+from articulos
+group by art_nom,art_col
+having art_nom not like 'impresora';
+
+
+/*Ejercicio 12*/
+
+select art_col
+from articulos
+group by art_col
+having avg(art_pv)>12
+order by art_col;
+
+/*Ejercicio 13*/
+
+select sum(vnt_cant),vnt_art
+from ventas
+where vnt_fch between 910109 and 910113
+group by vnt_tda, vnt_art
+having sum(vnt_cant)>2;
+
+
+/*Ejercicio 14*/
+
+select art_nom,art_peso,art_pv,(art_peso+art_pv)
+from articulos;
+
+/*Ejercicio 15*/
+
+select clt_pob
+from clientes
+group by clt_pob
+order by count(clt_pob) desc;
+
+/*Ejercicio 16*/
+
+select upper(clt_pob)
+from clientes
+group by clt_pob
+order by count(clt_pob) desc;
+
+
+/*Tema 4*/
+
+/*Ejercicio 1*/
+
+select *
+
+from articulos
+
+where art_peso > (select art_peso from articulos where art_num = 2)
+
+order by art_peso;
+
+/*Ejercicio 2*/
+
+select art_num,art_nom
+from articulos
+where art_peso > (select max(art_peso( from articulos where art_nom = 'calendario')
+or art_col in (select distinct art_col from articulos where art_nom = 'impresora');
+
+/*Ejercicio 3*/
+
+select *
+from articulos
+where art_col in (select art_col from articulos where art_num = 10) and art_peso >= (select avg(art_peso) from articulos);
+
+/*Ejercio 4*/
+
+select *
+from proveedores
+where prv_num in (select art_prv from articulos where art_col like 'negro');
+
+/*Ejercicio 5*/
+
+select clt_nom, clt_apell
+from clientes
+where clt_pais like 'e' and clt_pob in (select clt_pob from clientes where clt_nom like 'pablo')
+order by clt_num;
+
+/*Ejercicio 6*/
+
+a)
+
+select art_pv,art_col
+from articulos
+where (art_col,art_pv) in (select art_col,max(art_pv) from articulos group by art_col);
+
+b)
+
+select (art_pv/166),art_col
+from articulos
+where (art_col,art_pv) in (select max(art_pv),art_col from articulos group by art_col);
+
+/*Ejercicio 7*/
+
+ /*Ejercicio 8*/
+
+select tda_ger
+from tiendas
+where tda_num in (select vnt_tda from ventas where vnt_art=2);
+
+/*Ejercicio 9*/
+
+select *
+from articulos
+where art_pv > (select min(art_pv) from articulos where art_col like 'blanco');
+
+/*Ejercicio 10*/
+
+select *
+from articulos
+where art_pv > any (select min(art_pv) from articulos where art_col like 'blanco');
+
+
+/*Ejercicio 11*/
+
+ 
+
+/*Ejercicio 12*/
+
+select vnt_clt
+from ventas
+group by vnt_clt
+having avg(vnt_precio)>
+(select avg(vnt_precio) from ventas);
+
+/*Ejercicio 13*/
+
+select clt_num,clt_nom
+from clientes
+where clt_num in (select vnt_clt from ventas group by vnt_clt having count(distinct vnt_tda)>=2);
+
+/*Ejercicio 14*/
+
+select art_num,art_nom
+
+from articulos
+
+where art_num in (select vnt_art from ventas group by vnt_art having sum(vnt_cant)>(select avg(vnt_cant) from ventas));
+
+/*Ejercicio 15*/
+
+select *
+from clientes
+where clt_num in (select vnt_clt
+from ventas
+group by vnt_clt
+having count(distinct vnt_fch)>=3);
+
+/*Ejercicio 16*/
+
+select *
+from articulos
+where art_num in
+(select vnt_art from ventas where vnt_clt = 1);
+
+/*Ejercicio 17*/
+
+select *
+from clientes
+where clt_num not in
+(select vnt_clt from ventas where vnt_fch like '92%');
+
+/*Ejercicio 18*/
+
+select *
+from clientes
+where clt_pais='e' and clt_num in
+(select vnt_clt from ventas group by vnt_clt having max(vnt_cant)>5);
+
+/*Ejercicio 19*/
+
+SELECT TDA_GER
+
+FROM TIENDAS
+
+WHERE TDA_NUM IN (SELECT VNT_TDA FROM VENTAS GROUP BY VNT_TDA HAVING COUNT(VNT_TDA)>(SELECT AVG(VNT_TDA) FROM VENTAS));
+
+/*Ejercicio 20*/
+
+select *
+from clientes
+where (clt_pob like 'madrid' or clt_pob like 'barcelona') and clt_num not in
+(select vnt_clt
+from ventas
+group by vnt_clt
+having count(vnt_clt) >= 2);
+
+/*Tema 5*/
+
+/*Ejercicio 1*/
+
+select art_nom, art_peso,proveedores.prv_nom
+from articulos,proveedores
+where art_prv = prv_num and art_col = 'rojo'
+order by art_peso;
+
+/*Ejercicio 2*/
+
+select articulos.*,proveedores.*
+from articulos,proveedores
+where art_col = 'rojo';
+
+/*Ejercicio 3*/
+
+select clientes.*,ventas.vnt_fch
+from clientes,ventas
+where clt_num > 11 and (clt_num = vnt_clt or clt_num not in (select vnt_clt from ventas));
+
+/*Ejercicio 4*/
+
+select articulos.*
+from articulos,ventas
+where art_num=vnt_art and art_pc > (select art_pc from articulos where art_num = 8);
+
+/*Ejercicio 5*/
+
+select *
+from pesos;
+
+/*Ejercicio 6*/
+
+select articulos.*,pesos.peso_nom
+from articulos,pesos
+where art_peso between peso_min and peso_max;
+
+/*Ejercicio 7*/
+
+select *
+from articulos
+where art_col = 'rojo'
+union
+select *
+from articulos
+where art_peso > 500;
+
+/*Ejercicio 8*/
+
+select clientes.*
+from clientes,ventas
+where clt_num=vnt_clt;
+
+/*Ejercicio 9*/
+
+select *
+from clientes
+where clt_num not in (select vnt_clt from ventas);
+
+/*Ejercicio 10*/
+
+select articulos.art_nom nombre,articulos.art_col color, articulos.art_peso peso,max(ventas.vnt_cant) Cantidad
+from articulos,ventas
+where articulos.art_num = ventas.vnt_art and ventas.vnt_fch between '910109' and '920113'
+group by vnt_art
+having max(vnt_cant) > 5;
+
+/*Ejercicio 11*/
+
+select tiendas.*
+from tiendas,ventas
+where ventas.vnt_art=4 and tiendas.tda_num = ventas.vnt_tda;
+
+select *
+from tiendas
+where tda_num in
+(select vnt_tda
+from ventas
+where vnt_art=4);
+
+FALTAN OTRAS 2
+
+/*Ejercicio 12*/
+
+/*Ejercicio 13*/
+
+select *
+from tiendas
+where tda_num not in
+(select vnt_tda
+from ventas
+where vnt_art=4);
+
+/*Ejercicio 14*/
+
+MAL
+
+select *
+from tiendas
+where exists
+(select *
+from ventas
+where vnt_art!=4);
+
+/*Ejercicio 15*/
+
+select a.*
+from ventas a,ventas b
+where b.vnt_clt = 5 and a.vnt_art = b.vnt_art and a.vnt_clt != 5 and a.vnt_fch > b.vnt_fch;
+
+/*Ejercicio 16*/
+
+ 
+
+/*------------------*/
+/*    Bases de Datos  */
+/*    Curso 2017-18   */    
+/*------------------*/
+
+/*------------------*/
+/* Tabla provincias */
+/*------------------*/
+
+CREATE TABLE Provincias (
+    pro_id INT  AUTO_INCREMENT PRIMARY KEY,
+    pro_provincia VARCHAR(20)
+);
+
+/*------------------*/
+/* Tabla ciudades   */
+/*------------------*/
+
+CREATE TABLE Ciudades (
+    ciu_id INT  AUTO_INCREMENT PRIMARY KEY,
+    ciu_nombre VARCHAR(20),
+    ciu_provincia Int,
+    FOREIGN KEY(ciu_provincia) REFERENCES Provincias(pro_id)
+);
+
+/*-----------------------*/
+/* Tabla CodigosPostales */
+/*-----------------------*/
+
+CREATE TABLE CodigosPostales(
+    cp_cp INT PRIMARY KEY,
+    cp_ciudad INT,
+    FOREIGN KEY(cp_ciudad) REFERENCES Ciudades(ciu_id)
+);
+
+/*------------------*/
+/* Tabla clientes   */
+/*------------------*/
+
+CREATE TABLE Clientes (
+    cli_id INT  AUTO_INCREMENT PRIMARY KEY,
+    cli_dni VARCHAR(9),
+    cli_apellidos VARCHAR(40),
+    cli_nombre VARCHAR(20),
+    cli_direccion VARCHAR(150),
+    cli_cp INT,
+    cli_fec_nac date,
+    FOREIGN KEY(cli_cp) REFERENCES CodigosPostales(cp_cp)
+);
+
+/*------------------*/
+/* Tabla cuentas    */
+/*------------------*/
+
+create table Cuentas(
+    cue_id int auto_increment primary key,
+    cue_ccc varchar(20),
+    cue_cliente int,
+    FOREIGN KEY(cue_cliente)REFERENCES Clientes(cli_id)
+);
+
+/*------------------*/
+/* Tabla hipotecas  */
+/*------------------*/
+
+create table Hipotecas (
+    hip_id int auto_increment primary key,
+    hip_cuenta int,
+    hip_importe float not null,
+    hip_meses int not null,
+    hip_interes int not null,
+    hip_cuotas float,
+    hip_fecha_inicio date not null,
+    foreign key(hip_cuenta)references Cuentas(cue_id)
+);
+
+/* Alta de algunos datos */
+
+/* Datos provincias */
+
+INSERT INTO Provincias (pro_id, pro_provincia) VALUES
+(1, 'Sevilla'),
+(2, 'Cádiz'),
+(3, 'Almería'),
+(4, 'Málaga'),
+(5, 'Córdoba'),
+(6, 'Huelva'),
+(7, 'Jaen'),
+(8, 'Granada'),
+(9, 'Madrid');
+
+INSERT INTO `Provincias` (`pro_id`, `pro_provincia`) VALUES (NULL, 'Barcelona');
+
+INSERT INTO `Ciudades` (`ciu_id`, `ciu_nombre`, `ciu_provincia`) VALUES (NULL, 'Cádiz', '2'), (NULL, 'Puerto Real', '2'), (NULL, 'Jerez', '1'), (NULL, 'Sevilla', '1'), (NULL, 'Huelva', '6');
+
+INSERT INTO `CodigosPostales` (`cp_cp`, `cp_ciudad`) VALUES ('11001', '1'), ('11002', '1'), ('11402', '3'), ('11403', '3'), ('11500', '2');
+
+/*Ejercicio 2*/
+
+/*Ejercicio 2.1*/
+insert into Clientes values (NULL,'12345678A','Lopez Garcia','Virginia','Sol, 13',11001,NULL);
+ 
+insert into CodigosPostales values (11407,(select ciu_id from Ciudades where ciu_nombre = 'Jerez'));
+
+insert into Clientes values (NULL,'12345679B','Saura Perez','Juan','Urb. Membrillar, 3, Bajo B',11407,NULL);
+
+insert into Ciudades values (NULL,'Puerto Santa Maria',(select pro_id from Provincias where pro_provincia = 'Cadiz'));
+
+insert into CodigosPostales values (11502,(select ciu_id from Ciudades where ciu_nombre = 'Puerto Santa Maria'));
+
+insert into Clientes values (NULL,'12345680C','Ramirez Servando','Ana','C/ Larga 1',11502,NULL);
+
+insert into Provincias values (NULL,'Salamanca');
+
+insert into Ciudades values (NULL,'Salamanca',(select pro_id from Provincias where pro_provincia = 'Salamanca'));
+
+insert into CodigosPostales values (37001,(select ciu_id from Ciudades where ciu_nombre = 'Salamanca'));
+
+insert into Clientes values (NULL,'12345681D','Santos Pera','Vicente','Plaza Marco Antonio, 17 Dcha',37001,NULL);
+
+insert into Provincias values (NULL,'Huesca');
+
+insert into Ciudades values (NULL,'Almudevar',(select pro_id from Provincias where pro_provincia = 'Huesca'));
+
+insert into CodigosPostales values (22270,(select ciu_id from Ciudades where ciu_nombre = 'Almudevar'));
+
+insert into Clientes values (NULL,'12345682E','Larios Jardin','Miguel','Calle Roble, 4, 1ºA',22270,NULL);
+
+/*Ejercicio 2.2*/
+
+insert into Cuentas values (NULL,'21000003134567811115',(select cli_id from Clientes where cli_dni = '12345678A'));
+
+insert into Cuentas values (NULL,'21000024003102575766',(select cli_id from Clientes where cli_dni = '12345679B'));
+
+insert into Cuentas values (NULL,'21000024003102570000',(select cli_id from Clientes where cli_dni = '12345680C'));
+
+insert into Cuentas values (NULL,'21000024003102571111',(select cli_id from Clientes where cli_dni = '12345681D'));
+
+insert into Cuentas values (NULL,'21000024003102572222',(select cli_id from Clientes where cli_dni = '12345682E'));
+
+/*Ejercicio 2.3*/
+
+insert into Hipotecas values (NULL,(select cue_id from Cuentas,Clientes where cue_cliente = cli_id and cli_dni = '12345678A'),150000,360,2,360,'2018-04-30');
+
+insert into Hipotecas values (NULL,(select cue_id from Cuentas,Clientes where cue_cliente = cli_id and cli_dni = '12345680C'),150000,360,2,360,'2018-04-30');
+
+/*Ejercicio 2.4*/
+
+update Clientes
+set cli_nombre = 'Laura'
+where cli_dni = '12345680C';
+
+/*Ejercicio 2.5*/
+
+insert into CodigosPostales values ('11045',3);
+
+update Clientes
+set cli_cp = '11045'
+where cli_dni = '12345682E';
+
+/*Ejercicio 2.6*/
+
+
+delete from Hipotecas
+where hip_cuenta in (select cue_id from Cuentas,Clientes where cue_cliente = cli_id and cli_dni =  '12345682E');
+
+delete from Cuentas
+where cue_cliente in (select cli_id from Clientes where cli_dni =  '12345682E');
+
+delete from Clientes
+where cli_dni = '12345682E';
