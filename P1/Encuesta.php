@@ -19,6 +19,15 @@
 		}
 	} 
 	?>
+	<?php 
+		$dbhost = '127.0.0.1';
+		$dbuser = 'root';
+		$dbpass = '';
+		$db = 'p1';
+		$port = '3308';
+
+		$conexion = new mysqli('127.0.0.1', $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
+	?>
 	<form action = "<?php $_PHP_SELF ?>" method = "post"> 
 		<input type = "submit" name = "color" value = "Dark">
 		<input type = "submit" name = "color" value = "Light">
@@ -35,24 +44,44 @@
 				<td>Asignatura:</td>
 				<td>Grupo:</td>
 			</tr>
+	
 			<tr align=center>
-			</tr>
-			<tr align=right>
 			<?php
-			for($j = 1;$j <= 3;$j++){
-				echo "<td>";
-				for($i = 0;$i <= 9;$i++){
-					$k = 5 - $j;
-					while($k!=0){
-						$n = "pro".$j."cod".$k;
-						echo "<input type=radio name=$n value=$i>$i";
-						$k--;
-					}
-					echo "<br>";
-				}
-				echo "</td>";
+			for($j = 0;$j < 3;$j++):
+			if($j == 0)
+			{
+				$res = $conexion->query("SELECT * FROM Titulacion") or die ("Fallo consulta tabla");
+				$nombre = 'titulacion';
 			}
+			if($j == 1)
+			{
+				$res = $conexion->query("SELECT * FROM Asignatura") or die ("Fallo consulta tabla");
+				$nombre = 'asignatura';
+			}
+			if($j == 2)
+			{
+				$res = $conexion->query("SELECT * FROM Grupo") or die ("Fallo consulta tabla");
+				$nombre = 'grupo';
+			}
+
 			?>
+					<td>
+			<?php echo "<select name=$nombre>"; ?>
+				<?php
+				while($row = $res->fetch_assoc())
+				{
+					if($j == 0)
+						echo "<option value=".$row['cod_tit'].">".$row['cod_tit']."</option>";
+					if($j == 1)
+						echo "<option value=".$row['cod_asig'].">".$row['cod_asig']."</option>";
+					if($j == 2)
+						echo "<option value=".$row['cod_grup'].">".$row['cod_grup']."</option>";
+				}
+				?>
+			</select>
+					</td>
+			<?php endfor;?>
+			</tr>
 		</table>
 		<br>
 		<table border="1" align="center">
@@ -151,13 +180,6 @@
 		</table>
 		<br>
 		<?php
-		$dbhost = '127.0.0.1';
-		$dbuser = 'usuario';
-		$dbpass = '1234';
-		$db = 'p1';
-		$port = '3308';
-
-		$conexion = mysqli_connect('127.0.0.1', $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
 		$res = mysqli_query($conexion,"SELECT * FROM pregunta") or die ("Fallo consulta tabla");
 		?>
 		<table border="1" align="center">
@@ -177,14 +199,18 @@
 				</td>
 				<?php
 				for($j = 1;$j <= 3;$j++){
+					$query = $conexion->query("Select * from profesor") or die("Fallo consulta");
 					echo "<td>";
-					for($i = 0;$i <= 9;$i++){
-						for($k = 1;$k <= 4;$k++){
-							$n = "pro".$j."cod".$k;
-							echo "<input type=radio name=$n value=$i>$i";
-						}
-						echo "<br>";
+					echo "<select>";
+					while ($row = $query->fetch_assoc()) 
+					{
+						
+						echo "<option value=".$row['cod_prof'].">".$row['cod_prof']."</option>";
+
 					}
+					echo "</select>";
+				
+						echo "<br>";
 					echo "</td>";
 				}
 				?>

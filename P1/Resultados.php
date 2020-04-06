@@ -13,7 +13,7 @@
 		$conexion = mysqli_connect($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
 		
 		$id_asig = 0;
-		mysqli_query($conexion,"INSERT INTO inf_per (id_ip,id_asig,edad,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) VALUES (NULL,'".$id_asig."','".$_POST['edad']."','".$_POST['sexo']."','".$_POST['calto']."','".$_POST['cbajo']."','".$_POST['vmat']."','".$_POST['vexaminado']."','".$_POST['interes']."','".$_POST['tutoria']."','".$_POST['dificultad']."','".$_POST['calificacion']."','".$_POST['asistencia']."')") or die("F");
+		mysqli_query($conexion,"INSERT INTO encuesta (id_en,id_doc,edad,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) VALUES (NULL,'".$id_asig."','".$_POST['edad']."','".$_POST['sexo']."','".$_POST['calto']."','".$_POST['cbajo']."','".$_POST['vmat']."','".$_POST['vexaminado']."','".$_POST['interes']."','".$_POST['tutoria']."','".$_POST['dificultad']."','".$_POST['calificacion']."','".$_POST['asistencia']."')") or die("F");
 
 		$res = mysqli_query($conexion,"SELECT * FROM inf_per ORDER BY id_ip DESC LIMIT 1") or die ("Fallo consulta tabla");
 		$row = mysqli_fetch_assoc($res);
