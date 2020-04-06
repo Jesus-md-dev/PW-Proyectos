@@ -25,15 +25,16 @@ CREATE TABLE Grupo (
 );
 
 CREATE TABLE Docencia (
-    id_doc integer auto_increment primary key,
-    cod_tit integer,
-    cod_asig integer,
-    cod_prof integer,
-    cod_grup integer,
+    id_doc integer auto_increment,
+    cod_tit varchar(4),
+    cod_asig varchar(3),
+    cod_prof varchar(4),
+    cod_grup varchar(2),
     foreign key(cod_tit) references Titulacion(cod_tit),
     foreign key(cod_asig) references Asignatura(cod_asig),
     foreign key(cod_prof) references Profesor(cod_prof),
-    foreign key(cod_grup) references Grupo(cod_grup)
+    foreign key(cod_grup) references Grupo(cod_grup),
+    primary key(id_doc,cod_tit,cod_asig,cod_prof,cod_grup)
 );
 
 CREATE TABLE Pregunta (
@@ -79,3 +80,5 @@ insert into Grupo values ('02');
 insert into Profesor values('0001','profesor 1',1);
 insert into Profesor values('0002','profesor 2',2);
 insert into Profesor values('0003','profesor 3',3);
+
+insert into docencia values(NULL,'0001','001','0001,'01');

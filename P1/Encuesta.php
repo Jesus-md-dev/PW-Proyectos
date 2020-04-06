@@ -6,7 +6,9 @@
 </head>
 <body>
 	<?php
-	if($_POST){
+	$color = $_POST['color'];
+	$asistencia = $_POST['asistencia'];
+	if(isset($color)){
 		if($_POST['color']=="Dark")
 		{
 			echo "<body bgcolor=black>";
@@ -17,22 +19,24 @@
 			echo "<body bgcolor=white>";
 			echo "<font color=black>";
 		}
-	} 
-	?>
-	<?php 
-		$dbhost = '127.0.0.1';
-		$dbuser = 'root';
-		$dbpass = '';
-		$db = 'p1';
-		$port = '3308';
+	}
+	$dbhost = '127.0.0.1';
+	$dbuser = 'root';
+	$dbpass = '';
+	$db = 'p1';
+	$port = '3308';
 
-		$conexion = new mysqli('127.0.0.1', $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
+	$conexion = new mysqli($dbhost, $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
+	if(isset($asistencia))
+	{
+		//$consulta->query("insert into encuesta (id_en,id_doc,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) values (NULL,'1',".$_POST['id_doc'].",".$_POST['edad'].")")
+	}
 	?>
 	<form action = "<?php $_PHP_SELF ?>" method = "post"> 
 		<input type = "submit" name = "color" value = "Dark">
 		<input type = "submit" name = "color" value = "Light">
 	</form>
-	<form method=post action=Resultados.php>
+	<form method=post action = "<?php $_PHP_SELF ?>">
 		<table align=center border = 1>
 			<tr align=center>
 				<td colspan=3>
