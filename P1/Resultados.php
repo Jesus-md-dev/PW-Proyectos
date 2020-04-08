@@ -6,6 +6,7 @@
 
 <body>
 	<?php
+	error_reporting(E_ERROR | E_PARSE);
 	$dbhost = '127.0.0.1';
 	$dbuser = 'root';
 	$dbpass = '';
@@ -17,13 +18,55 @@
 
 	//Valores
 	$cProfesor = $_POST['cProfesor'];
-	$cEdad = $_POST['cEdad'];
 	$profesor = $_POST['profesor'];
+
+	$cEdad = $_POST['cEdad'];
 	$edad = $_POST['edad'];
-	$valorPreguntas = array("0"=> "NS", "1" => "1", "2" => "2", "3" => "3", "4" => "
-		4", "5" => "5");
 	$valorEdades = array("1" => "<=19", "2" => "20-21", "3" => "21-23", "4" => "
 		24-25", "5" => ">25");
+
+	$cSexo = $_POST['cSexo'];
+	$sexo = $_POST['sexo'];
+	$valorSexo = array("1" => "Hombre", "2" => "Mujer");
+
+	$cAlto = $_POST['cAlto'];
+	$alto = $_POST['alto'];
+	$valorAlto = array("1" => "1º", "2" => "2º", "3" => "3º", "4" => "4º", "5" => "5º", "6" => "6º");
+
+	$cBajo = $_POST['cBajo'];
+	$bajo = $_POST['bajo'];
+	$valorBajo = array("1" => "1º", "2" => "2º", "3" => "3º", "4" => "4º", "5" => "5º", "6" => "6º");
+
+	$cMatriculado = $_POST['cMatriculado'];
+	$matriclado = $_POST['matriclado'];
+	$valorMatriculado = array("1" => "1", "2" => "2", "3" => "3", "4" => ">3");
+
+	$cExaminado = $_POST['cExaminado'];
+	$examinado = $_POST['examinado'];
+	$valorExaminado = array("1" => "1", "2" => "2", "3" => "3", "4" => ">3");
+
+	$cMatriculado = $_POST['cInteres'];
+	$interes = $_POST['interes'];
+	$valorInteres = array("1" => "Nada", "2" => "Algo", "3" => "Bastante", "4" => "Mucho");
+
+	$cTutorias = $_POST['cTutorias'];
+	$tutorias = $_POST['tutorias'];
+	$valorTutorias = array("1" => "Nada", "2" => "Algo", "3" => "Bastante", "4" => "Mucho");
+
+	$cDificultad = $_POST['cDificultad'];
+	$dificultad = $_POST['dificultad'];
+	$valorDificultad = array("1" => "Baja", "2" => "Media", "3" => "Alta", "4" => "Muy alta");
+
+	$cCalificacion = $_POST['cCalificacion'];
+	$calificacion = $_POST['calificacion'];
+	$valorCalificacion = array("1" => "N.P.", "2" => "Sus.", "3" => "Apro.", "4" => "Not.", "5" => "Sobr.", "6" => "Mat.Hon.");
+
+	$cAsistencia = $_POST['cAsistencia'];
+	$asistencia = $_POST['asistencia'];
+	$valorAsistencia = array("1" => "Menos 50%", "2" => "Entre 50% y 80%", "3" => "Más de 80%");
+
+	$valorPreguntas = array("0"=> "NS", "1" => "1", "2" => "2", "3" => "3", "4" => "
+		4", "5" => "5");
 	?>
 	<h2>Filtros:</h2>
 	<form action="Resultados.php" method="post">
@@ -37,29 +80,118 @@
 		?>
 		</select>
 		<br>
+
 		<input type="checkbox" name="cEdad">
 		Edad: 
 		<select name="edad">
-			<?php 
-			for($i=1; $i <= count($valorEdades); $i++) {
+			<?php for($i=1; $i <= count($valorEdades); $i++) {
 				echo "<option value=".$i.">".$valorEdades[$i]."</option>";
-			} 
-			?>
+			} ?>
 		</select>
 		<br>
+
 		<input type="checkbox" name="cSexo">
 		Sexo: 
 		<select name="sexo">
-			<option value="1">Hombre</option>
-			<option value="2">Mujer</option>
+			<?php for($i=1; $i <= count($valorSexo); $i++) {
+				echo "<option value=".$i.">".$valorSexo[$i]."</option>";
+			} ?>
 		</select>
 		<br>
-						
+
+		<input type="checkbox" name="cAlto">
+		Curso más alto:
+		<select name="alto">
+			<?php for($i=1; $i <= count($valorAlto); $i++) {
+				echo "<option value=".$i.">".$valorAlto[$i]."</option>";
+			} ?>
+		</select>
 		<br>
+
+		<input type="checkbox" name="cBajo">
+		Curso más bajo:
+		<select name="bajo">
+			<?php for($i=1; $i <= count($valorBajo); $i++) {
+				echo "<option value=".$i.">".$valorBajo[$i]."</option>";
+			} ?>
+		</select>
+		<br>
+
+		<input type="checkbox" name="cMatriculado">
+		Veces matriculado:
+		<select name="matriclado">
+			<?php for($i=1; $i <= count($valorMatriculado); $i++) {
+				echo "<option value=".$i.">".$valorMatriculado[$i]."</option>";
+			} ?>
+		</select>
+		<br>
+
+		<input type="checkbox" name="cExaminado">
+		Veces examinado:
+		<select name="examinado">
+			<?php for($i=1; $i <= count($valorExaminado); $i++) {
+				echo "<option value=".$i.">".$valorExaminado[$i]."</option>";
+			} ?>
+		</select>
+		<br>
+
+		<input type="checkbox" name="cInteres">
+		Interes:
+		<select name="interes">
+			<?php for($i=1; $i <= count($valorInteres); $i++) {
+				echo "<option value=".$i.">".$valorInteres[$i]."</option>";
+			} ?>
+		</select>
+		<br>
+
+		<input type="checkbox" name="cTutorias">
+		Uso de Tutorias:
+		<select name="tutorias">
+			<?php for($i=1; $i <= count($valorTutorias); $i++) {
+				echo "<option value=".$i.">".$valorTutorias[$i]."</option>";
+			} ?>
+		</select>
+		<br>
+
+		<input type="checkbox" name="cDificultad">
+		Dificultad:
+		<select name="dificultad">
+			<?php for($i=1; $i <= count($valorDificultad); $i++) {
+				echo "<option value=".$i.">".$valorDificultad[$i]."</option>";
+			} ?>
+		</select>
+		<br>
+
+		<input type="checkbox" name="cCalificacion">
+		Calificacion esperada:
+		<select name="calificacion">
+			<?php for($i=1; $i <= count($valorCalificacion); $i++) {
+				echo "<option value=".$i.">".$valorCalificacion[$i]."</option>";
+			} ?>
+		</select>
+		<br>
+
+		<input type="checkbox" name="cAsistencia">
+		Asistencia:
+		<select name="asistencia">
+			<?php for($i=1; $i <= count($valorAsistencia); $i++) {
+				echo "<option value=".$i.">".$valorAsistencia[$i]."</option>";
+			} ?>
+		</select>
+		<br>
+
 		<input type="submit" name="Buscar" value="Buscar">
 	</form>
 
 	<?php
+
+	$name = "Pregunta: Todas";
+
+	if($cProfesor == "on"):
+		$resp = $conexion->query("select * from profesor where cod_prof = $profesor") or die ("Fallo Profesor");
+		$fila = $resp->fetch_assoc();
+		$name = $name." | Profesor: ".$fila['nombre'];
+	endif;
 
 	$nombrePregunta ="Todas";
 	$select = "*";
@@ -67,20 +199,122 @@
 	$wherecond = "false";
 	//*Encuesta
 
-	if($cEdad=="on")
+	if($cEdad=="on" || $cSexo=="on" || $cAlto == "on" || $cBajo == "on" || $cMatriculado == "on" || $cExaminado == "on"  || $cInteres == "on" || $cTutorias == "on" || $cDificultad == "on" || $cCalificacion == "on" || $cAsistencia == "on")
 	{
 		$QEncuesta = "on";
 		$tabla = "Encuesta";
 		$id_enQuery = "select id_en from ".$tabla;
+
 		if($cEdad=="on")
 		{
 			if($wherecond == "true")
-				$respWhere = $respWhere." and ";
+				$where = $where." and ";
 			else
 				$wherecond = "true";
-
 			$where = $where."edad = $edad";
+			$name = $name." | Edad: ".$valorEdades[$edad];
 		}
+
+		if($cSexo=="on")
+		{
+			if($wherecond == "true")
+				$where = $where." and ";
+			else
+				$wherecond = "true";
+			$where = $where."sexo = $sexo";
+			$name = $name." | Sexo: ".$valorSexo[$sexo];
+		}
+
+		if($cAlto=="on")
+		{
+			if($wherecond == "true")
+				$where = $where." and ";
+			else
+				$wherecond = "true";
+			$where = $where."curso_sup = $alto";
+			$name = $name." | Curso más alto: ".$valorAlto[$alto];
+		}
+
+		if($cBajo=="on")
+		{
+			if($wherecond == "true")
+				$where = $where." and ";
+			else
+				$wherecond = "true";
+			$where = $where."curso_inf = $bajo";
+			$name = $name." | Curso más bajo: ".$valorBajo[$bajo];
+		}
+
+		if($cMatriculado=="on")
+		{
+			if($wherecond == "true")
+				$where = $where." and ";
+			else
+				$wherecond = "true";
+			$where = $where."n_matri = $matriclado";
+			$name = $name." | Veces matriclado: ".$valorMatriculado[$matriclado];
+		}
+
+		if($cExaminado=="on")
+		{
+			if($wherecond == "true")
+				$where = $where." and ";
+			else
+				$wherecond = "true";
+			$where = $where."n_exam = $examinado";
+			$name = $name." | Veces examinado: ".$valorExaminado[$examinado];
+		}
+
+		if($cInteres=="on")
+		{
+			if($wherecond == "true")
+				$where = $where." and ";
+			else
+				$wherecond = "true";
+			$where = $where."interes = $interes";
+			$name = $name." | Interes: ".$valorInteres[$interes];
+		}
+
+		if($cTutorias=="on")
+		{
+			if($wherecond == "true")
+				$where = $where." and ";
+			else
+				$wherecond = "true";
+			$where = $where."tutorias = $tutorias";
+			$name = $name." | Tutorias: ".$valorTutorias[$tutorias];
+		}
+
+		if($cDificultad=="on")
+		{
+			if($wherecond == "true")
+				$where = $where." and ";
+			else
+				$wherecond = "true";
+			$where = $where."dificultad = $dificultad";
+			$name = $name." | Dificultad: ".$valorDificultad[$dificultad];
+		}
+
+		if($cCalificacion=="on")
+		{
+			if($wherecond == "true")
+				$where = $where." and ";
+			else
+				$wherecond = "true";
+			$where = $where."calif = $calificacion";
+			$name = $name." | Calificacion: ".$valorCalificacion[$calificacion];
+		}
+
+		if($cAsistencia=="on")
+		{
+			if($wherecond == "true")
+				$where = $where." and ";
+			else
+				$wherecond = "true";
+			$where = $where."asist = $asistencia";
+			$name = $name." | Asistencia: ".$valorAsistencia[$asistencia];
+		}
+
 		if($wherecond == "true")
 			$id_enQuery = $id_enQuery.$where.")";
 	}
@@ -144,8 +378,6 @@
 			$valorOpcion['5']++;
 		$i++;
 	endwhile;
-	
-	
 
 	$dataPoints = array();
 
@@ -155,17 +387,6 @@
 		array_push($dataPoints,$array);
 	}
 
-	$name = "Pregunta: Todas";
-	if($cProfesor == "on"):
-		$resp = $conexion->query("select * from profesor where cod_prof = $profesor") or die ("Fallo Profesor");
-		$fila = $resp->fetch_assoc();
-		$name = $name." - Profesor: ".$fila['nombre'];
-	endif;
-
-	if($cEdad == "on")
-	{
-		$name = $name." - Edad: ".$valorEdades[$edad];
-	}
 	?>
 
 	<script>
