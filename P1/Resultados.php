@@ -13,10 +13,11 @@
 	$db = 'p1';
 	$port = '3308';
 	$conexion = new mysqli($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
-	
-	$query = $conexion->query("Select * from profesor") or die("Fallo consulta");
 
 	//Valores
+	//$cPregunta = $_POST['cPregunta'];
+	$pregunta = $_POST['pregunta'];
+
 	$cProfesor = $_POST['cProfesor'];
 	$profesor = $_POST['profesor'];
 
@@ -45,7 +46,7 @@
 	$examinado = $_POST['examinado'];
 	$valorExaminado = array("1" => "1", "2" => "2", "3" => "3", "4" => ">3");
 
-	$cMatriculado = $_POST['cInteres'];
+	$cInteres = $_POST['cInteres'];
 	$interes = $_POST['interes'];
 	$valorInteres = array("1" => "Nada", "2" => "Algo", "3" => "Bastante", "4" => "Mucho");
 
@@ -71,9 +72,22 @@
 	<h2>Filtros:</h2>
 	<form action="Resultados.php" method="post">
 
+		<!--<input type="checkbox" name="cPregunta">-->
+		Pregunta: <select name=pregunta>
+		<option value="-1">Todas</option>
+		<?php 
+		$query = $conexion->query("Select * from pregunta") or die("Fallo consulta");
+		while ($row = $query->fetch_assoc()):
+			echo "<option value=".$row['cod_preg'].">".$row['enunciado']."</option>";
+		endwhile;
+		?>
+		</select>
+		<br>
+
 		<input type="checkbox" name="cProfesor">
 		Profesor: <select name=profesor>
 		<?php 
+		$query = $conexion->query("Select * from profesor") or die("Fallo consulta");
 		while ($row = $query->fetch_assoc()):
 			echo "<option value=".$row['cod_prof'].">".$row['cod_prof']."</option>";
 		endwhile; 
@@ -185,7 +199,16 @@
 
 	<?php
 
-	$name = "Pregunta: Todas";
+	if($pregunta == "-1")
+		$nombrePregunta = "Todas";
+	else
+	{
+		$query = $conexion->query("Select * from pregunta where cod_preg = ".$pregunta) or die("Fallo consulta Pregunta");
+		$result = $query->fetch_assoc();
+		$nombrePregunta = $result['enunciado'];
+	}
+
+	$name = "Pregunta: ".$nombrePregunta;
 
 	if($cProfesor == "on"):
 		$resp = $conexion->query("select * from profesor where cod_prof = $profesor") or die ("Fallo Profesor");
@@ -193,7 +216,6 @@
 		$name = $name." | Profesor: ".$fila['nombre'];
 	endif;
 
-	$nombrePregunta ="Todas";
 	$select = "*";
 	$where = " where(";
 	$wherecond = "false";
@@ -331,6 +353,14 @@
 	$tabla = "respuesta";
 	$Query = "select ".$select." from ".$tabla;
 
+	if($pregunta != "-1"):
+		if($wherecond == "true")
+			$where = $where." and ";
+		else
+			$wherecond = "true";
+		$where = $where."cod_preg = $pregunta";
+	endif;
+
 	if($cProfesor == "on"):
 		if($wherecond == "true")
 			$where = $where." and ";
@@ -353,6 +383,7 @@
 	echo $Query;
 	$respuestas = $conexion->query("$Query") or die("Fallo");
 	$nrespuestas = $respuestas->num_rows;
+
 	//Respuesta
 
 	$nopciones = 6;
