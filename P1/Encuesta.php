@@ -6,8 +6,13 @@
 </head>
 <body>
 	<?php
+	$dbhost = '127.0.0.1';
+	$dbuser = 'root';
+	$dbpass = '';
+	$db = 'p1';
+	$port = '3308';
+	$conexion = new mysqli($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
 	$color = $_POST['color'];
-	$asistencia = $_POST['asistencia'];
 	if(isset($color)){
 		if($_POST['color']=="Dark")
 		{
@@ -25,11 +30,51 @@
 	$dbpass = '';
 	$db = 'p1';
 	$port = '3308';
-
-	$conexion = new mysqli($dbhost, $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
-	if(isset($asistencia))
+	if(isset($_POST['asistencia']))
 	{
-		//$consulta->query("insert into encuesta (id_en,id_doc,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) values (NULL,'1',".$_POST['id_doc'].",".$_POST['edad'].")")
+		$conexion = new mysqli($dbhost, $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
+		$cod_tit = $_POST['titulacion'];
+		$cod_asig = $_POST['asignatura'];
+		$cod_grup = $_POST['grupo'];
+
+		$res = mysqli_query($conexion,"select * from docencia where (cod_tit=$cod_tit and cod_grup = $cod_grup and cod_asig = $cod_asig)") or die("Fallo consulta") or die ("Fallo docencia");
+		$row = mysqli_fetch_assoc($res);
+
+		$cod_prof = '0001';
+		$id_doc = $row['id_doc'];
+		$edad = $_POST['edad'];
+		$sexo = $_POST['sexo'];
+		$curso_sup = $_POST['calto'];
+		$curso_inf = $_POST['cbajo'];
+		$n_matri = $_POST['vmat'];
+		$n_exam = $_POST['vexaminado'];
+		$interes = $_POST['interes'];
+		$tutoria = $_POST['tutoria'];
+		$dificultad = $_POST['dificultad'];
+		$calif = $_POST['calificacion'];
+		$asist = $_POST['asistencia'];
+		mysqli_query($conexion,"INSERT INTO encuesta(id_en,id_doc,edad,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) VALUES (NULL,$id_doc,$edad,$sexo,$curso_sup,$curso_inf,$n_matri,$n_exam,$interes,$tutoria,$dificultad,$calif,$asist)");
+
+		$consulta = $conexion->query("select id_en from encuesta order by id_en desc")or die ("Fallo consulta");
+		$fila = $consulta->fetch_assoc();
+		$id_en = $fila['id_en'];
+		$consulta = $conexion->query("Select cod_preg from pregunta");
+		$pro = 1;
+		$pre = 0;
+
+		while($fila = $consulta->fetch_assoc()):
+		
+			$pre++;
+			$cod_preg = $fila['cod_preg'];
+
+			$profpreg = "pro".$pro."pre".$pre;
+			$resp = $_POST[$profpreg];
+
+			$profesorn = "profesor".$pro;
+			$cod_prof = $_POST[$profesorn];
+
+			$conexion->query("insert into respuesta (id_en,cod_preg,cod_prof,resp) values ($id_en,$cod_preg,$cod_prof,$resp)");
+		endwhile;
 	}
 	?>
 	<form action = "<?php $_PHP_SELF ?>" method = "post"> 
@@ -205,7 +250,8 @@
 				for($j = 1;$j <= 3;$j++){
 					$query = $conexion->query("Select * from profesor") or die("Fallo consulta");
 					echo "<td>";
-					echo "<select>";
+					$profesor = "profesor".$j;
+					echo "<select name=".$profesor.">";
 					while ($row = $query->fetch_assoc()) 
 					{
 						

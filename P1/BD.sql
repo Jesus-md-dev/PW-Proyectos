@@ -28,13 +28,11 @@ CREATE TABLE Docencia (
     id_doc integer auto_increment,
     cod_tit varchar(4),
     cod_asig varchar(3),
-    cod_prof varchar(4),
     cod_grup varchar(2),
     foreign key(cod_tit) references Titulacion(cod_tit),
     foreign key(cod_asig) references Asignatura(cod_asig),
-    foreign key(cod_prof) references Profesor(cod_prof),
     foreign key(cod_grup) references Grupo(cod_grup),
-    primary key(id_doc,cod_tit,cod_asig,cod_prof,cod_grup)
+    primary key(id_doc,cod_tit,cod_asig,cod_grup)
 );
 
 CREATE TABLE Pregunta (
@@ -62,10 +60,12 @@ CREATE TABLE Encuesta (
 CREATE TABLE Respuesta (
     id_en integer,
     cod_preg integer,
+    cod_prof varchar(4),
     resp integer,
     foreign key(id_en) references Encuesta(id_en),
     foreign key(cod_preg) references Pregunta(cod_preg),
-    primary key(id_en,cod_preg)
+    foreign key(cod_prof) references Profesor(cod_prof),
+    primary key(id_en,cod_preg,cod_prof)
 );
 
 insert into pregunta values(NULL,'Pregunta 1');
@@ -81,4 +81,5 @@ insert into Profesor values('0001','profesor 1',1);
 insert into Profesor values('0002','profesor 2',2);
 insert into Profesor values('0003','profesor 3',3);
 
-insert into docencia values(NULL,'0001','001','0001,'01');
+insert into docencia values(NULL,'0001','001','01');
+insert into docencia values(NULL,'0001','001','02');
