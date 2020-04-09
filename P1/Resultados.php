@@ -265,27 +265,17 @@ endif;
 <head>
 	<title>Resultados</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<style>
-	* {
-	  box-sizing: border-box;
-	}
 
-	/* Create two equal columns that floats next to each other */
+	<style>
+
 	.column {
 	  float: left;
 	  width: 50%;
-	  padding: 10px;
-	  height: 300px; /* Should be removed. Only for demonstration */
-	}
-
-	/* Clear floats after the columns */
-	.row:after {
-	  content: "";
-	  display: table;
-	  clear: both;
 	}
 	</style>
+
 	<script>
+
 		window.onload = function () {
 		 
 		var chart = new CanvasJS.Chart("chartContainer", {
@@ -306,21 +296,23 @@ endif;
 		});
 		chart.render();
 		}
+
 	</script>
 
 	<style type="text/css">
 		body{
 			background: lightgrey;
-			background-image: url('image.jpg');
+			background-image: url('image.gif');
 			color: white;
+			font-family: Helvetica;
 		}
 	</style>
 </head>
 
 <body>
-
-<div class="row">
-  <div class="column">
+<div>
+	<h1 align = center>Resultados de las Encuestas</h1>
+	<div class="column">
 		<h2>Filtros:</h2>
 		<form action="Resultados.php" method="post">
 
