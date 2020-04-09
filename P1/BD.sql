@@ -20,21 +20,18 @@ CREATE TABLE Titulacion (
 );
 
 CREATE TABLE Asignatura (
-    id_asig integer auto_increment not null,
+    id_asig integer auto_increment primary key,
     cod_asig smallint,
     cod_tit smallint,
     nombre varchar(30) not null,
-    primary key(cod_asig, cod_tit),
     foreign key(cod_tit) references Titulacion(cod_tit)
 );
 
 CREATE TABLE Grupo (
-	id_grupo integer auto_increment not null,
+	id_grupo integer auto_increment primary key,
     id_asig integer not null,
-    cod_grup tinyint not null,   
-    primary key(id_asig, cod_grup),
-    foreign key(id_asig) references Asignatura(id_asig),
-    foreign key(cod_tit) references Titulacion(cod_tit)
+    cod_grup tinyint not null,
+    foreign key(id_asig) references Asignatura(id_asig)
 );
 
 CREATE TABLE Pregunta (
