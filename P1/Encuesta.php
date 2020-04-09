@@ -58,7 +58,6 @@
 				$fila = $consulta->fetch_assoc();
 				$id_en = $fila['id_en'];
 				$consulta = $conexion->query("Select cod_preg from pregunta");
-				$pro = 1;
 				$pre = 0;
 
 				while($fila = $consulta->fetch_assoc()) {
@@ -66,7 +65,7 @@
 					$pre++;
 					$cod_preg = $fila['cod_preg'];
 
-					$profpreg = "pro".$pro."pre".$pre;
+					$profpreg = "pro".$i."pre".$pre;
 					$resp = $_POST[$profpreg];
 
 					// $profesorn = "profesor".$pro;
