@@ -4,34 +4,37 @@ CREATE DATABASE p1;
 
 USE p1;
 
+DROP TABLE IF EXISTS Titulacion;
 DROP TABLE IF EXISTS Asignatura;
-DROP TABLE IF EXISTS Inf_Per;
-DROP TABLE IF EXISTS Preg_Resp;
+DROP TABLE IF EXISTS Grupo;
 DROP TABLE IF EXISTS Pregunta;
 DROP TABLE IF EXISTS Profesor;
-DROP TABLE IF EXISTS Prof_Asig;
+DROP TABLE IF EXISTS Prof_Grup;
+DROP TABLE IF EXISTS Inf_Per;
+DROP TABLE IF EXISTS Respuesta;
+DROP TABLE IF EXISTS preguntas;
 
-CREATE TABLE Tit_Nom (
+CREATE TABLE Titulacion (
     cod_tit smallint primary key,
     nombre varchar(50) not null
 );
 
-CREATE TABLE Asig_Nom (
+CREATE TABLE Asignatura (
     id_asig integer auto_increment not null,
     cod_asig smallint,
     cod_tit smallint,
     nombre varchar(30) not null,
     primary key(cod_asig, cod_tit),
-    foreign key(cod_tit) references Tit_Nom(cod_tit)
+    foreign key(cod_tit) references Titulacion(cod_tit)
 );
 
 CREATE TABLE Grupo (
 	id_grupo integer auto_increment not null,
     id_asig integer not null,
-    cod_grup tinyint,
+    cod_grup tinyint not null,   
     primary key(id_asig, cod_grup),
-    foreign key(cod_asig) references Asig_Nom(cod_asig),
-    foreign key(cod_tit) references Tit_Nom(cod_tit)
+    foreign key(id_asig) references Asignatura(id_asig),
+    foreign key(cod_tit) references Titulacion(cod_tit)
 );
 
 CREATE TABLE Pregunta (
@@ -47,9 +50,9 @@ CREATE TABLE Profesor (
 
 CREATE TABLE Prof_Grup (
     cod_prof smallint,
-    id_grup smallint,
+    id_grup integer,
     foreign key(cod_prof) references Profesor(cod_prof),
-    foreign key(id_grup) references Asignatura(id_grup),
+    foreign key(id_grup) references Grupo(id_grup),
     primary key(cod_prof, id_grup)
 );
 
@@ -67,7 +70,7 @@ CREATE TABLE Inf_Per (
     dificultad enum('baja', 'media', 'alta', 'muy alta'),
     calif enum('np', 'suspenso', 'aprobado', 'notable', 'sobre', 'mh'),
     asist enum('baja', 'normal', 'alta'),
-    foreign key(id_grup) references Asignatura(id_grup)
+    foreign key(id_grup) references Grupo(id_grup)
 );
 
 CREATE TABLE Respuesta (
@@ -81,6 +84,7 @@ CREATE TABLE Respuesta (
     primary key(cod_prof, id_ip, cod_preg)
 );
 
-insert into preguntas values(NULL,'¿Eres maricon?');
-insert into preguntas values(NULL,'¿Hola?');
-insert into preguntas values(NULL,'¿Estas viendo porno solo?');
+insert into Pregunta values(NULL,'¿Eres maricon?');
+insert into Pregunta values(NULL,'¿Hola?');
+insert into Pregunta values(NULL,'¿Estas viendo porno solo?');
+insert into Pregunta values(NULL,'¿Cuánto meriendas al día?');

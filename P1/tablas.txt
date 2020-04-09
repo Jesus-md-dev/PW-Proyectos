@@ -1,14 +1,5 @@
 +-----------------------------------+
-|              Asig_Nom             |
-+---------+-------------------------+
-| id_asig | Clave primaria          |
-+---------+-------------------------+
-| nombre  | Nombre de la asignatura |
-+---------+-------------------------+
-
-
-+-----------------------------------+
-|              Tit_Nom              |
+|             Titulacion            |
 +---------+-------------------------+
 | cod_tit | Clave primaria          |
 +---------+-------------------------+
@@ -16,49 +7,60 @@
 +---------+-------------------------+
 
 
-+---------------------------------------+
-|               Asignatura              |
-+----------+----------------------------+
-| Id_Asig  | Clave externa a Respuesta  |
-+----------+----------------------------+
-| Cod_Tit  | Código de la titulación    |
-+----------+----------------------------+
-| Cod_Asig | Código de la asignatura    |
-+----------+----------------------------+
-| Cod_Grup | Código del grupo           |
-+----------+----------------------------+
++-----------------------------------------+
+|                Asignatura               |
++----------+------------------------------+
+| id_asig  | Identificador único asig+tit |
++----------+------------------------------+
+| cod_asig | Clave primaria I             |
++----------+------------------------------+
+| cod_tit  | Clave primaria II            |
++----------+------------------------------+
+| nombre   | Nombre de la asignatura      |
++----------+------------------------------+	
+
+
++-------------------------------------------+
+|                   Grupo                   |
++----------+--------------------------------+
+| id_grupo | Identificador único asig+grupo |
++----------+--------------------------------+
+| id_asig  | Clave primaria I               |
++----------+--------------------------------+
+| cod_grup | Clave primaria II              |
++----------+--------------------------------+
 
 
 +--------------------------------------------+
 |            Informacion_Personal            |
 +------------+-------------------------------+
-| Id_Asig    | Clave externa a Asignatura    |
+| id_grupo   | Clave externa a Grupo         |
 +------------+-------------------------------+
-| Id_IP      | Clave externa a PyR           |
+| id_IP      | Clave externa a PyR           |
 +------------+-------------------------------+
-| Edad       | Años                          |
+| edad       | Años                          |
 +------------+-------------------------------+
-| Sexo       | Hombre o Mujer                |
+| sexo       | Hombre o Mujer                |
 +------------+-------------------------------+
-| Curso_Sup  | Curso superior de matri       |
+| curso_Sup  | Curso superior de matri       |
 +------------+-------------------------------+
-| Curso_Inf  | Curso inferior de matri       |
+| curso_Inf  | Curso inferior de matri       |
 +------------+-------------------------------+
 | n_Matri    | Número de matrículas          |
 +------------+-------------------------------+
 | n_Exam     | Número de examinaciones       |
 +------------+-------------------------------+
-| Interes    | Nada, algo, bastante o mucho  |
+| interes    | Nada, algo, bastante o mucho  |
 +------------+-------------------------------+
-| Tutorias   | Nada, algo, bastante o mucho  |
+| tutorias   | Nada, algo, bastante o mucho  |
 +------------+-------------------------------+
-| Dificultad | Baja, media, alta o muy alta  |
+| dificultad | Baja, media, alta o muy alta  |
 +------------+-------------------------------+
-| Calif      | NP, sus, apro, not, sobr o MH |
+| calif      | NP, sus, apro, not, sobr o MH |
 +------------+-------------------------------+
-| Asist      | <50, 50-80, >80               |
+| asist      | <50, 50-80, >80               |
 +------------+-------------------------------+
-| Respuestas | Las preguntas dinámicas       |
+| respuestas | Las preguntas dinámicas       |
 +------------+-------------------------------+
 
 +-----------------------------------------+
@@ -84,17 +86,17 @@
 +--------------------------------+
 |            Profesor            |
 +----------+---------------------+
-| Cod_Prof | Código del profesor |
+| cod_Prof | Código del profesor |
 +----------+---------------------+
-| Nombre   | Nombre del profesor |
+| nombre   | Nombre del profesor |
 +----------+---------------------+
-| Telefono | Numero del profesor |
+| telefono | Numero del profesor |
 +----------+---------------------+
 
 +---------------------------------------+
 |               Prof_Asig               |
 +----------+----------------------------+
-| Cod_Prof | Código del profesor        |
+| cod_Prof | Código del profesor        |
 +----------+----------------------------+
-| Id_Asig  | Clave externa a Asignatura |
+| id_Asig  | Clave externa a Asignatura |
 +----------+----------------------------+
