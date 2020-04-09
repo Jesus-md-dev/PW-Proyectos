@@ -58,7 +58,7 @@
 		<table border="1" align="center">
 			<tr>
 				<td align="center">
-					<h2>Información Personal y Academica de los Estudiantes</h2>
+					<h2>Información Personal y Académica de los Estudiantes</h2>
 				</td>
 			</tr>
 			<tr>
@@ -151,7 +151,7 @@
 		$port = '8889';
 
 		$conexion = mysqli_connect('127.0.0.1', $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
-		$res = mysqli_query($conexion,"SELECT * FROM preguntas") or die ("Fallo consulta tabla");
+		$res = mysqli_query($conexion,"SELECT * FROM Pregunta") or die ("Fallo consulta tabla");
 		?>
 		<table border="1" align="center">
 			<tr align="center">
