@@ -6,7 +6,15 @@
 </head>
 <body>
 	<?php
-	if($_POST){
+	$dbhost = 'localhost';
+	$dbuser = 'root';
+	$dbpass = 'root';
+	$db = 'p1';
+	$port = '8889';
+	$conexion = new mysqli($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
+	$color = $_POST['color'];
+
+	if(isset($color)){
 		if($_POST['color']=="Dark")
 		{
 			echo "<body bgcolor=black>";
@@ -17,13 +25,64 @@
 			echo "<body bgcolor=white>";
 			echo "<font color=black>";
 		}
-	} 
+	}
+
+	if(isset($_POST['asistencia']))
+	{
+		$conexion = new mysqli($dbhost, $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
+		$cod_tit = $_POST['titulacion'];
+		$cod_asig = $_POST['asignatura'];
+		$cod_grup = $_POST['grupo'];
+
+		$res = mysqli_query($conexion,"select * from docencia where (cod_tit=$cod_tit and cod_grup = $cod_grup and cod_asig = $cod_asig)") or die("Fallo consulta") or die ("Fallo docencia");
+		$row = mysqli_fetch_assoc($res);
+
+		for($i = 1; $i <= 3; $i++) {
+			$cod_prof = $_POST["profesor.$i"];
+			if($cod_prof != '0') {
+				$id_doc = $row['id_doc'];
+				$edad = $_POST['edad'];
+				$sexo = $_POST['sexo'];
+				$curso_sup = $_POST['calto'];
+				$curso_inf = $_POST['cbajo'];
+				$n_matri = $_POST['vmat'];
+				$n_exam = $_POST['vexaminado'];
+				$interes = $_POST['interes'];
+				$tutoria = $_POST['tutoria'];
+				$dificultad = $_POST['dificultad'];
+				$calif = $_POST['calificacion'];
+				$asist = $_POST['asistencia'];
+				mysqli_query($conexion,"INSERT INTO encuesta(id_en,id_doc,edad,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) VALUES (NULL,$id_doc,$edad,$sexo,$curso_sup,$curso_inf,$n_matri,$n_exam,$interes,$tutoria,$dificultad,$calif,$asist)");
+
+				$consulta = $conexion->query("select id_en from encuesta order by id_en desc")or die ("Fallo consulta");
+				$fila = $consulta->fetch_assoc();
+				$id_en = $fila['id_en'];
+				$consulta = $conexion->query("Select cod_preg from pregunta");
+				$pro = 1;
+				$pre = 0;
+
+				while($fila = $consulta->fetch_assoc()) {
+				
+					$pre++;
+					$cod_preg = $fila['cod_preg'];
+
+					$profpreg = "pro".$pro."pre".$pre;
+					$resp = $_POST[$profpreg];
+
+					// $profesorn = "profesor".$pro;
+					// $cod_prof = $_POST[$profesorn];
+
+					$conexion->query("insert into respuesta (id_en,cod_preg,cod_prof,resp) values ($id_en,$cod_preg,$cod_prof,$resp)");
+				}
+			}
+		}
+	}
 	?>
 	<form action = "<?php $_PHP_SELF ?>" method = "post"> 
 		<input type = "submit" name = "color" value = "Dark">
 		<input type = "submit" name = "color" value = "Light">
 	</form>
-	<form method=post action=Resultados.php>
+	<form method=post action = "<?php $_PHP_SELF ?>">
 		<table align=center border = 1>
 			<tr align=center>
 				<td colspan=3>
@@ -35,30 +94,50 @@
 				<td>Asignatura:</td>
 				<td>Grupo:</td>
 			</tr>
+	
 			<tr align=center>
-			</tr>
-			<tr align=right>
 			<?php
-			for($j = 1;$j <= 3;$j++){
-				echo "<td>";
-				for($i = 0;$i <= 9;$i++){
-					$k = 5 - $j;
-					while($k!=0){
-						$n = "pro".$j."cod".$k;
-						echo "<input type=radio name=$n value=$i>$i";
-						$k--;
-					}
-					echo "<br>";
-				}
-				echo "</td>";
+			for($j = 0;$j < 3;$j++):
+			if($j == 0)
+			{
+				$res = $conexion->query("SELECT * FROM Titulacion") or die ("Fallo consulta tabla");
+				$nombre = 'titulacion';
 			}
+			if($j == 1)
+			{
+				$res = $conexion->query("SELECT * FROM Asignatura") or die ("Fallo consulta tabla");
+				$nombre = 'asignatura';
+			}
+			if($j == 2)
+			{
+				$res = $conexion->query("SELECT * FROM Grupo") or die ("Fallo consulta tabla");
+				$nombre = 'grupo';
+			}
+
 			?>
+					<td>
+			<?php echo "<select name=$nombre>"; ?>
+				<?php
+				while($row = $res->fetch_assoc())
+				{
+					if($j == 0)
+						echo "<option value=".$row['cod_tit'].">".$row['cod_tit']."</option>";
+					if($j == 1)
+						echo "<option value=".$row['cod_asig'].">".$row['cod_asig']."</option>";
+					if($j == 2)
+						echo "<option value=".$row['cod_grup'].">".$row['cod_grup']."</option>";
+				}
+				?>
+			</select>
+					</td>
+			<?php endfor;?>
+			</tr>
 		</table>
 		<br>
 		<table border="1" align="center">
 			<tr>
 				<td align="center">
-					<h2>Información Personal y Académica de los Estudiantes</h2>
+					<h2>Información Personal y Academica de los Estudiantes</h2>
 				</td>
 			</tr>
 			<tr>
@@ -93,6 +172,13 @@
 								echo "<input type=radio name=cbajo value=$i>$n";
 							}
 							?>
+						</li>
+						<br>
+						<li>Veces que te has matriculado en esta asignatura: 
+							<input type="radio" name="vmat" value="1">1
+							<input type="radio" name="vmat" value="2">2
+							<input type="radio" name="vmat" value="3">3
+							<input type="radio" name="vmat" value="4">>3
 						</li>
 						<br>
 						<li>Veces que te has examinado en esta asignatura: 
@@ -144,14 +230,7 @@
 		</table>
 		<br>
 		<?php
-		$dbhost = '127.0.0.1';
-		$dbuser = 'root';
-		$dbpass = 'root';
-		$db = 'p1';
-		$port = '8889';
-
-		$conexion = mysqli_connect('127.0.0.1', $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
-		$res = mysqli_query($conexion,"SELECT * FROM Pregunta") or die ("Fallo consulta tabla");
+		$res = mysqli_query($conexion,"SELECT * FROM pregunta") or die ("Fallo consulta tabla");
 		?>
 		<table border="1" align="center">
 			<tr align="center">
@@ -170,14 +249,21 @@
 				</td>
 				<?php
 				for($j = 1;$j <= 3;$j++){
+					$query = $conexion->query("Select * from profesor") or die("Fallo consulta");
 					echo "<td>";
-					for($i = 0;$i <= 9;$i++){
-						for($k = 1;$k <= 4;$k++){
-							$n = "pro".$j."cod".$k;
-							echo "<input type=radio name=$n value=$i>$i";
-						}
-						echo "<br>";
+					$profesor = "profesor".$j;
+					echo "<select name=".$profesor.">";
+					if($j != 1)
+						echo "<option value=0>"."Ninguno"."</option>";
+					while ($row = $query->fetch_assoc()) 
+					{
+						
+						echo "<option value=".$row['cod_prof'].">".$row['cod_prof']."</option>";
+
 					}
+					echo "</select>";
+				
+						echo "<br>";
 					echo "</td>";
 				}
 				?>
@@ -187,7 +273,7 @@
 			while ($row = mysqli_fetch_assoc($res)){
 				echo "<tr>";
 					echo "<td>";
-						echo $i.". ".$row['pregunta']."<br>";
+						echo $i.". ".$row['enunciado']."<br>";
 					echo "</td>";
 					for($j = 1; $j <= 3; $j++){
 						echo "<td  width=210>";
