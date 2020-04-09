@@ -52,7 +52,7 @@ CREATE TABLE Prof_Grup (
     cod_prof smallint,
     id_grup integer,
     foreign key(cod_prof) references Profesor(cod_prof),
-    foreign key(id_grup) references Grupo(id_grup),
+    foreign key(id_grup) references Grupo(id_grupo),
     primary key(cod_prof, id_grup)
 );
 
@@ -70,7 +70,7 @@ CREATE TABLE Inf_Per (
     dificultad enum('baja', 'media', 'alta', 'muy alta'),
     calif enum('np', 'suspenso', 'aprobado', 'notable', 'sobre', 'mh'),
     asist enum('baja', 'normal', 'alta'),
-    foreign key(id_grup) references Grupo(id_grup)
+    foreign key(id_grup) references Grupo(id_grupo)
 );
 
 CREATE TABLE Respuesta (
