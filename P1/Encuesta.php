@@ -275,12 +275,12 @@
 					for($j = 1; $j <= 3; $j++){
 						echo "<td  width=210>";
 						$n = "pro".$j."pre".$i;
-						echo "<input type=radio name=$n value=0 checked>NS";
-						echo "<input type=radio name=$n value=1>1";
-						echo "<input type=radio name=$n value=2>2";
-						echo "<input type=radio name=$n value=3>3";
-						echo "<input type=radio name=$n value=4>4";
-						echo "<input type=radio name=$n value=5>5";
+						echo "<input type=radio name=$n value=1 checked>NS";
+						echo "<input type=radio name=$n value=2>1";
+						echo "<input type=radio name=$n value=3>2";
+						echo "<input type=radio name=$n value=4>3";
+						echo "<input type=radio name=$n value=5>4";
+						echo "<input type=radio name=$n value=6>5";
 						echo "</td>";
 					}
 				echo "</tr>";

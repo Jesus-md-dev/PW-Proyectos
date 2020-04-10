@@ -6,335 +6,152 @@
 	$db = 'p1';
 	$port = '3308';
 	$conexion = new mysqli($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
-
 	//Valores
-	$typeChart = $_POST['typeChart'];
-	$valorChart = array("1" => "column", "2" => "bar", "3" => "pie", "4" => "doughnut");
-	$valorGrafica = array("1" => "Columnas", "2" => "Barras", "3" => "Circular", "4" => "Donut");
 
-	//$cPregunta = $_POST['cPregunta'];
-	$pregunta = $_POST['pregunta'];
+	$query = $conexion->query("Select * from pregunta") or die("Fallo consulta preg");
+	while ($row = $query->fetch_assoc())
+		$vector['pregunta'][$row['cod_preg']] = $row['enunciado'];
 
-	$cProfesor = $_POST['cProfesor'];
-	$profesor = $_POST['profesor'];
+	$query = $conexion->query("Select * from profesor") or die("Fallo consulta prof");
+	while ($row = $query->fetch_assoc())
+		$vector['profesor'][$row['cod_prof']] = $row['nombre'];
 
-	$cTitulacion = $_POST['cTitulacion'];
-	$titulacion = $_POST['titulacion'];
 
-	$cAsignatura = $_POST['cAsignatura'];
-	$asignatura = $_POST['asignatura'];
+	$query = $conexion->query("Select * from titulacion") or die("Fallo consulta tit");
+	while ($row = $query->fetch_assoc())
+		$vector['titulacion'][$row['cod_tit']] = $row['nombre'];
 
-	$cGrupo = $_POST['cGrupo'];
-	$grupo = $_POST['grupo'];
+	$query = $conexion->query("Select * from asignatura") or die("Fallo consulta asig");
+	while ($row = $query->fetch_assoc())
+		$vector['asignatura'][$row['cod_asig']] = $row['nombre'];
 
-	$tEdad = "Edad";
-	$cEdad = $_POST['cEdad'];
-	$edad = $_POST['edad'];
-	$valorEdades = array("1" => "<=19", "2" => "20-21", "3" => "21-23", "4" => "
+	$query = $conexion->query("Select * from grupo") or die("Fallo consulta gr");
+	while ($row = $query->fetch_assoc())
+		$vector['grupo'][$row['cod_grup']] = $row['cod_grup'];
+
+	$vector['edad'] = array("1" => "<=19", "2" => "20-21", "3" => "21-23", "4" => "
 		24-25", "5" => ">25");
+	$nTipo['edad'] = "edad";
 
-	$cSexo = $_POST['cSexo'];
-	$sexo = $_POST['sexo'];
-	$valorSexo = array("1" => "Hombre", "2" => "Mujer");
+	$vector['sexo'] = array("1" => "Hombre", "2" => "Mujer");
+	$nTipo['sexo'] = "sexo";
 
-	$cAlto = $_POST['cAlto'];
-	$alto = $_POST['alto'];
-	$valorAlto = array("1" => "1º", "2" => "2º", "3" => "3º", "4" => "4º", "5" => "5º", "6" => "6º");
+	$vector['alto'] = array("1" => "1º", "2" => "2º", "3" => "3º", "4" => "4º", "5" => "5º", "6" => "6º");
+	$nTipo['alto'] = "curso_sup";
 
-	$cBajo = $_POST['cBajo'];
-	$bajo = $_POST['bajo'];
-	$valorBajo = array("1" => "1º", "2" => "2º", "3" => "3º", "4" => "4º", "5" => "5º", "6" => "6º");
+	$vector['bajo'] = array("1" => "1º", "2" => "2º", "3" => "3º", "4" => "4º", "5" => "5º", "6" => "6º");
+	$nTipo['bajo'] = "curso_inf";
 
-	$cMatriculado = $_POST['cMatriculado'];
-	$matriculado = $_POST['matriculado'];
-	$valorMatriculado = array("1" => "1", "2" => "2", "3" => "3", "4" => ">3");
+	$vector['matriculado'] = array("1" => "1", "2" => "2", "3" => "3", "4" => ">3");
+	$nTipo['matriculado'] = "n_matri";
 
-	$cExaminado = $_POST['cExaminado'];
-	$examinado = $_POST['examinado'];
-	$valorExaminado = array("1" => "1", "2" => "2", "3" => "3", "4" => ">3");
+	$vector['examinado'] = array("1" => "1", "2" => "2", "3" => "3", "4" => ">3");
+	$nTipo['examinado'] = "n_exam";
 
-	$cInteres = $_POST['cInteres'];
-	$interes = $_POST['interes'];
-	$valorInteres = array("1" => "Nada", "2" => "Algo", "3" => "Bastante", "4" => "Mucho");
+	$vector['interes'] = array("1" => "Nada", "2" => "Algo", "3" => "Bastante", "4" => "Mucho");
+	$nTipo['interes'] = "interes";
 
-	$cTutorias = $_POST['cTutorias'];
-	$tutorias = $_POST['tutorias'];
-	$valorTutorias = array("1" => "Nada", "2" => "Algo", "3" => "Bastante", "4" => "Mucho");
+	$vector['tutorias'] = array("1" => "Nada", "2" => "Algo", "3" => "Bastante", "4" => "Mucho");
+	$nTipo['tutorias'] = "tutorias";
 
-	$cDificultad = $_POST['cDificultad'];
-	$dificultad = $_POST['dificultad'];
-	$valorDificultad = array("1" => "Baja", "2" => "Media", "3" => "Alta", "4" => "Muy alta");
+	$vector['dificultad'] = array("1" => "Baja", "2" => "Media", "3" => "Alta", "4" => "Muy alta");
+	$nTipo['dificultad'] = "dificultad";
 
-	$cCalificacion = $_POST['cCalificacion'];
-	$calificacion = $_POST['calificacion'];
-	$valorCalificacion = array("1" => "No Presentado", "2" => "Suspenso", "3" => "Aprobado", "4" => "Notable", "5" => "Sobresaliente", "6" => "Matricula de Honor");
+	$vector['calificacion'] = array("1" => "No Presentado", "2" => "Suspenso", "3" => "Aprobado", "4" => "Notable", "5" => "Sobresaliente", "6" => "Matricula de Honor");
+	$nTipo['calificacion'] = "calif";
 
-	$cAsistencia = $_POST['cAsistencia'];
-	$asistencia = $_POST['asistencia'];
-	$valorAsistencia = array("1" => "Menos 50%", "2" => "Entre 50% y 80%", "3" => "Más de 80%");
+	$vector['asistencia'] = array("1" => "Menos 50%", "2" => "Entre 50% y 80%", "3" => "Más de 80%");
+	$nTipo['asistencia'] = "asist";
 
-	$valorPreguntas = array("0"=> "N.S.", "1" => "1", "2" => "2", "3" => "3", "4" => "
-		4", "5" => "5");
-?>
+	$vector['respuesta'] = array("1"=> "N.S.", "2" => "1", "3" => "2", "4" => "3", "5" => "
+		4", "6" => "5");
 
-<?php
+	$QDocencia = "false";
+	$QEncuesta = "false";
 
-function insertarWhereName(&$wherecond,&$where,$value,$id,$type,$string,&$name)
-{
-	if($wherecond == "true")
-		$where = $where." and ";
-	else
-		$wherecond = "true";
-	$where = $where."$type = $id";
-	$name = $name." | $string: ".$value[$id];
-}
+	$valorNulo = "0";
+	$unAtributo = "global";
 
-function insertarWhere(&$wherecond,&$where,$id,$type)
-{
-	if($wherecond == "true")
-		$where = $where." and ";
-	else
-		$wherecond = "true";
-	$where = $where."$type = $id";
-}
-
-function selectContent($title,$name,$check,$vector)
-{
-	echo "<input type=checkbox name=$check>";
-	echo " ".$title.": ";
-	echo "<select name=$name>";
-	 for($i=1; $i <= count($vector); $i++) {
-		echo "<option value=".$i.">".$vector[$i]."</option>";
-	}
-	echo "</select>";
-	echo "<br>";
-} 
+	$profesor = "0001";
 
 ?>
 
 <?php
-	$buscar = $_POST['Buscar'];
-	if(isset($buscar))
-		$cBuscar = "true";
-?>
-
-<?php
-
-if($cBuscar == "true"):
-	if($pregunta == "-1")
-		$nombrePregunta = "Todas";
-	else
-	{
-		$query = $conexion->query("Select * from pregunta where cod_preg = ".$pregunta) or die("Fallo consulta Pregunta");
-		$result = $query->fetch_assoc();
-		$nombrePregunta = $result['enunciado'];
-	}
-
-	$name = "Pregunta: ".$nombrePregunta;
-
-	if($cProfesor == "on"):
-		$resp = $conexion->query("select * from profesor where cod_prof = $profesor") or die ("Fallo Profesor");
-		$fila = $resp->fetch_assoc();
-		$name = $name." | Profesor: ".$fila['nombre'];
-	endif;
-
-	if($cTitulacion == "on"):
-		$resp = $conexion->query("select * from titulacion where cod_tit = $titulacion") or die ("Fallo titulacion");
-		$fila = $resp->fetch_assoc();
-		$name = $name." | Titulación: ".$fila['nombre'];
-	endif;
-
-	if($cAsignatura == "on"):
-		$resp = $conexion->query("select * from asignatura where cod_asig = $asignatura") or die ("Fallo asignatura");
-		$fila = $resp->fetch_assoc();
-		$name = $name." | Asignatura: ".$fila['nombre'];
-	endif;
-
-	if($cGrupo == "on"):
-		$resp = $conexion->query("select * from grupo where cod_grup = $grupo") or die ("Fallo Grupo");
-		$fila = $resp->fetch_assoc();
-		$name = $name." | Grupo: ".$fila['cod_grup'];
-	endif;
-
-	$select = "id_doc";
-	$tabla = "docencia";
-	$where = " where(";
-	$wherecond = "false";
-	$docQuery = "select ".$select." from ".$tabla;
 
 	//*Docencia
-	if($cTitulacion == "on" || $cAsignatura == "on" || $cGrupo == "on")
-	{
-		$QDocencia = "on";
-		if($cTitulacion == "on")
-			insertarWhere($wherecond,$where,$titulacion,"cod_tit");
-		if($cAsignatura == "on")
-			insertarWhere($wherecond,$where,$asignatura,"cod_asig");
-		if($cGrupo == "on")
-			insertarWhere($wherecond,$where,$grupo,"cod_grup");
-		if($wherecond == "true")
-			$docQuery = $docQuery.$where.")";
-		
-		if($cProfesor == "on")
-		{
-			$q = "select * from profesordocencia where (cod_prof = $profesor and id_doc in ($docQuery))";
-			echo $q."<br>";
-			$res = $conexion->query($q);
-			if($res->num_rows <= 0):
-				$puedeMostrar = "false";
-				$error = "El Profesor $profesor no pertenece a: <br>";
-				if($cTitulacion == "on"):
-					$query = $conexion->query("Select * from titulacion where (cod_tit = $titulacion)") or die("Fallo consulta");
-					$row = $query->fetch_assoc();
-					$error = $error."<br>-Titulación: $row[nombre] ";
-				endif;
-				if($cAsignatura == "on"):
-					$query = $conexion->query("Select * from asignatura where (cod_asig = $asignatura)") or die("Fallo consulta");
-					$row = $query->fetch_assoc();
-					$error = $error."<br>-Asignatura: $row[nombre] ";
-				endif;
-				if($cGrupo == "on")
-					$error = $error."<br>-Grupo: $grupo ";
-			endif;			
-		}
-	}
+	$where = $profesor;
+	$profdocQuery = "select id_doc from profesordocencia where (cod_prof = $where)";
+	$profdocres = $conexion->query($profdocQuery);
+	$profdocrow = $profdocres->fetch_assoc();
+	$datos['id_doc'] = $profdocrow['id_doc'];
 
-	//Docencia
+	$where = $datos['id_doc'];
+	$docQuery = "select * from docencia where (id_doc = $where)";
+	$docres = $conexion->query($docQuery);
+	$docrow = $docres->fetch_assoc();
+	$datos['cod_tit'] = $docrow['cod_tit'];
+	$datos['cod_asig'] = $docrow['cod_asig'];
+	$datos['cod_grup'] = $docrow['cod_grup'];
 
-	$select = "*";
-	$where = " where(";
-	$wherecond = "false";
-	//*Encuesta
+	$respQuery = "select * from respuesta";
+	$respres = $conexion->query($respQuery);
+	for($i=1;$i<=6;$i++)
+		$voto[$i] = 0;
+	while($resprow = $respres->fetch_assoc())
+		$voto[$resprow['resp']]++;
 
-	if($cEdad=="on" || $cSexo=="on" || $cAlto == "on" || $cBajo == "on" || $cMatriculado == "on" || $cExaminado == "on"  || $cInteres == "on" || $cTutorias == "on" || $cDificultad == "on" || $cCalificacion == "on" || $cAsistencia == "on" || $QDocencia = "on")
-	{
-		$QEncuesta = "on";
-		$tabla = "Encuesta";
-		$id_enQuery = "select id_en from ".$tabla;
+	print_r($voto);
 
-		if($cEdad=="on")
-			insertarWhereName($wherecond,$where,$valorEdades,$edad,"edad","Edad",$name);
+	$vNS = array("y" => $voto["1"], "label" => "N.S.");
+	$v1 = array("y" => $voto["2"], "label" => "1");
+	$v2 = array("y" => $voto["3"], "label" => "2");
+	$v3 = array("y" => $voto["4"], "label" => "3");
+	$v4 = array("y" => $voto["5"], "label" => "4");
+	$v5 = array("y" => $voto["6"], "label" => "5");
 
-		if($cSexo=="on")
-			insertarWhereName($wherecond,$where,$valorSexo,$sexo,"sexo","Sexo",$name);
-
-		if($cAlto=="on")
-			insertarWhereName($wherecond,$where,$valorAlto,$alto,"curso_sup","Curso más alto",$name);
-
-		if($cBajo=="on")
-			insertarWhereName($wherecond,$where,$valorBajo,$bajo,"curso_inf","Curso más bajo",$name);
-
-		if($cMatriculado=="on")
-			insertarWhereName($wherecond,$where,$valorMatriculado,$matriculado,"n_matri","Veces matriculado",$name);
-
-		if($cExaminado=="on")
-			insertarWhereName($wherecond,$where,$valorExaminado,$examinado,"n_exam","Veces examinado",$name);
-
-		if($cInteres=="on")
-			insertarWhereName($wherecond,$where,$valorInteres,$interes,"interes","Interés",$name);
-
-		if($cTutorias=="on")
-			insertarWhereName($wherecond,$where,$valorTutorias,$tutorias,"tutorias","Tutorías",$name);
-
-		if($cDificultad=="on")
-			insertarWhereName($wherecond,$where,$valorDificultad,$dificultad,"dificultad","Dificultad",$name);
-
-		if($cCalificacion=="on")
-			insertarWhereName($wherecond,$where,$valorCalificacion,$calificacion,"calif","Calificacion",$name);
-
-		if($cAsistencia=="on")
-			insertarWhereName($wherecond,$where,$valorAsistencia,$asistencia,"asist","Asistencia",$name);
-		if($QEncuesta == "on"):
-			if($wherecond == "true")
-				$where = $where." and ";
-			else
-				$wherecond = "true";
-			$where = $where."id_doc in (".$docQuery.")";
-		endif;
-		if($wherecond == "true")
-			$id_enQuery = $id_enQuery.$where.")";
-	}
-
-	//Encuesta
-
-	$nombrePregunta ="Todas";
-	$select = "*";
-	$where = " where(";
-	$wherecond = "false";
-
-	//*Respuesta
-
-	$tabla = "respuesta";
-	$Query = "select ".$select." from ".$tabla;
-
-	if($pregunta != "-1")
-		insertarWhere($wherecond,$where,$pregunta,"cod_preg",);
-
-	if($cProfesor == "on")
-		insertarWhere($wherecond,$where,$profesor,"cod_prof",);
-
-	if($QEncuesta == "on"):
-		if($wherecond == "true")
-			$where = $where." and ";
-		else
-			$wherecond = "true";
-		$where = $where."id_en in (".$id_enQuery.")";
-	endif;
-
-	if($wherecond == "true")
-		$Query = $Query.$where.")";
-	$respuestas = $conexion->query("$Query") or die("Fallo respuestas");
-	$nrespuestas = $respuestas->num_rows;
-	//Respuesta
-
-	$nopciones = 6;
-
-	for($i = 0; $i < $nopciones; $i++)
-	{
-		$valorOpcion[$i] = 0;
-	}
-
-	while($respFila = $respuestas->fetch_assoc()):
-		$vectorRespuestas[] = $respFila['resp'];
-		$valorOpcion[$respFila['resp']]++;
-	endwhile;
+	print_r($v1);
 
 	$dataPoints = array();
 
 	for($i = 0; $i < $nopciones; $i++)
 	{
-		$array = array("y"=> $valorOpcion[$i], "label"=> $valorPreguntas[$i]);
+		$array = array("y"=> "5", "label"=> "a");
 		array_push($dataPoints,$array);
 	}
-endif;
-	echo "Docencia: ".$docQuery."<br>";
-	echo "Encuesta: ".$id_enQuery."<br>";
-	echo "Respuesta: ".$Query."<br>";
+	print_r($dataPoints);
+
 ?>
 
 <?php
+	if(!isset($atributo)):
 	//media
+
 	$media = 0;
-	for($i = 1; $i <= 5; $i++)
+	for($i = 2; $i <= 6; $i++)
 	{
-		$media +=( $valorOpcion[$i]*$i);
+		$media +=($valorOpcion[$i]*($i-1));
 	}
+
 	if($media != 0)
 		$media /= $nrespuestas;
+
 	$media = number_format($media,2);
+
 	//mediana
 	sort($vectorRespuestas);
 	$mediana = $vectorRespuestas[($nrespuestas/2)-1];
+
 	if(($nrespuestas%2)==0)
 	{
 		$mediana += $vectorRespuestas[($nrespuestas/2)];
 		if($mediana != 0)
 			$mediana /=2;
 	}
+
 	//moda
 	$moda = 0;
 	$nrepeticiones = 0;
-	for($i = 0; $i < $nopciones; $i++)
+	for($i = 1; $i <= $nopciones; $i++)
 	{
 		if($valorOpcion[$i] > $nrepeticiones)
 		{
@@ -342,6 +159,7 @@ endif;
 			$nrepeticiones = $valorOpcion[$i];
 		}
 	}
+	endif;
 ?>
 
 <!DOCTYPE html>
@@ -368,7 +186,7 @@ endif;
 			animationEnabled: true,
 			theme: "light1",
 			data: [{
-				type: "<?php echo "$valorChart[$typeChart]" ?>",
+				type: "bar",
 				showInLegend: "true",
 				indexLabelFontSize: 14,
 				indexLabel: "{y}",
@@ -379,9 +197,7 @@ endif;
 				dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
 			}]
 		});
-		//chart.data[0].set("type","pie",false)
 		chart.render();
-
 		}
 
 	</script>
@@ -393,115 +209,167 @@ endif;
 			text-shadow: 1px white;
 			font-family: Helvetica;
 		}
+
+		table{
+			table-layout: auto;
+		}
+
+		tr{
+			table-layout: auto;
+		}
+
+		td{
+			table-layout: auto;
+		}
+
+		td.border {
+			border: 1px solid black;
+		}
+
+
+		.content-loader tr td {
+			white-space: nowrap;
+		}
+
 	</style>
 </head>
 
 <body>
-<div>
-	<h1 align = center>Resultados de las Encuestas</h1>
-	<div class="column">
-		
-		<form action="Resultados.php" method="post">
-			<h2>Opciones:</h2>
-			Tipo de gráfico: 
-			<select name=typeChart>;
-			 <?php for($i=1; $i <= count($valorGrafica); $i++) {
-				echo "<option value=".$i.">".$valorGrafica[$i]."</option>";  
-			} ?>
-			</select>
-			<br>
+	<h2 align = center>INFORME DE SATISFACCIÓN CON LA DOCENCIA UNIVERSITARIA.</h2>
+		<table align="center" border="1">
+			<tr>
+				<td>
+					<br>
+					PROFESOR/A<br>
+					ASIGNATURA<br>
+					DEPARTAMENTO<br>
+					TITULACION<br>
+					CENTRO<br>
+			 		<br>
+				</td>
+				<td class="border" align="center">
+					<br>
+					<?php echo $vector['profesor'][$profesor]; ?> <br>
+					<?php echo $vector['asignatura'][$datos['cod_asig']]; ?> <br>
+					<?php echo $vector['profesor'][$profesor]; ?> <br>
+					<?php echo $vector['titulacion'][$datos['cod_tit']]; ?> <br>
+					<?php echo $vector['profesor'][$profesor]; ?> <br>
+					 <br>
+				</td>
+				<td>
+					<table>
+						<tr>
+							<td>
+								<br>
+								VALORACIÓN GLOBAL PROFESOR/A-ASIGNATURA: <br>
+								Planificación de la Enseñanza y Aprendizaje: <br>
+								Desarrollo de la Docencia: <br>
+								Resultados: Eficacia y Satisfacción: <br>
+							</td>
+							<td align = "center">
+							MD <br>
+							<table>
+								<tr>
+									<td class="border">
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+									</td>
+								</tr>
+							</table>
+							</td>
 
-			<!--<input type="checkbox" name="cPregunta">-->
-			Pregunta: <select name=pregunta>
-			<option value="-1">Todas</option>
-			<?php 
-			$query = $conexion->query("Select * from pregunta") or die("Fallo consulta");
-			while ($row = $query->fetch_assoc()):
-				echo "<option value=".$row['cod_preg'].">".$row['enunciado']."</option>";
-			endwhile;
-			?>
-			</select>
-			<br>
-			<h3>Filtros:</h3>
-			<input type="checkbox" name="cProfesor">
-			Profesor: <select name=profesor>
-			<?php 
-			$query = $conexion->query("Select * from profesor") or die("Fallo consulta");
-			while ($row = $query->fetch_assoc()):
-				echo "<option value=".$row['cod_prof'].">".$row['nombre']."</option>";
-			endwhile; 
-			?>
-			</select>
-			<br>
+							<td align = "center">
+							MD Depart.<br>
+							<table>
+								<tr>
+									<td>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+									</td>
+								</tr>
+							</table>
+							</td>
 
-			<input type="checkbox" name="cTitulacion">
-			Titulación: <select name=titulacion>
-			<?php 
-			$query = $conexion->query("Select * from titulacion") or die("Fallo consulta");
-			while ($row = $query->fetch_assoc()):
-				echo "<option value=".$row['cod_tit'].">".$row['nombre']."</option>";
-			endwhile; 
-			?>
-			</select>
-			<br>
-
-			<input type="checkbox" name="cAsignatura">
-			Asignatura: <select name=asignatura>
-			<?php 
-			$query = $conexion->query("Select * from asignatura") or die("Fallo consulta");
-			while ($row = $query->fetch_assoc()):
-				echo "<option value=".$row['cod_asig'].">".$row['nombre']."</option>";
-			endwhile; 
-			?>
-			</select>
-			<br>
-
-			<input type="checkbox" name="cGrupo">
-			Grupo: <select name=grupo>
-			<?php 
-			$query = $conexion->query("Select * from grupo") or die("Fallo consulta");
-			while ($row = $query->fetch_assoc()):
-				echo "<option value=".$row['cod_grup'].">".$row['cod_grup']."</option>";
-			endwhile; 
-			?>
-			</select>
-			<br>
-			<?php 
-
-			selectContent("Edad","edad","cEdad",$valorEdades);
-			selectContent("Sexo","sexo","cSexo",$valorSexo);
-			selectContent("Curso más alto","alto","cAlto",$valorAlto);
-			selectContent("Curso más bajo","bajo","cBajo",$valorBajo);
-			selectContent("Veces matriculado","matriculado","cMatriculado",$valorMatriculado);
-			selectContent("Veces examinado","examinado","cExaminado",$valorExaminado);
-			selectContent("Interés","interes","cInteres",$valorInteres);
-			selectContent("Uso de tutorías","tutorias","cTutorias",$valorTutorias);
-			selectContent("Dificultad","dificultad","cDificultad",$valorDificultad);
-			selectContent("Calificación esperada","calificacion","cCalificacion",$valorCalificacion);
-			selectContent("Asistencia","asistencia","cAsistencia",$valorAsistencia);
-
-			?>
-			<input type="submit" name="Buscar" value="Buscar">
-		</form>
-	</div>
- 	<div class="column">
- 	<?php if($puedeMostrar != "false"): ?>
- 		<h3 align="center"><?php echo $name; ?></h3>
-		<div id="chartContainer" style="height: 250px; width: 100%;"></div>
-		<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-
-		<h3 align="center">Media: <?php echo $media; ?></h3>
-		<h3 align="center">Mediana: <?php echo $mediana; ?></h3>
-		<h3 align="center">Moda: <?php echo $moda; ?></h3>
-		<h3 align="center"><?php echo $puedeMostrar; ?></h3>
-	<?php endif;
-	if($puedeMostrar == "false"):
-	?>
-	<h2><?php echo $error; ?></h1>
-	<?php
-	endif;
-	$conexion->close();?>
-	</div>
-</div>
+							<td align = "center">
+							MD Titulación<br>
+							<table>
+								<tr>
+									<td>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+									</td>
+								</tr>
+							</table>
+							</td>
+							
+							<td align="center">
+							MD Centro<br>
+							<table>
+								<tr>
+									<td>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+									</td>
+								</tr>
+							</table>
+							</td>
+							
+							<td align = "center">
+							MD UCA<br>
+							<table>
+								<tr>
+									<td>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+										<?php echo $media ?> <br>
+									</td>
+								</tr>
+							</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<table border=1px>
+						<tr>
+							<td></td>
+							<td align="center">N</td>
+							<td>MD</td>
+							<td>DT</td>
+						</tr>
+						<?php $i=1; ?>
+						<?php foreach ($vector['pregunta'] as $preg): ?>
+						<tr>
+							<td>
+								<?php 
+								echo $i.". ".$preg;
+								$i++; 
+								?>
+							</td>
+							<td><?php echo $media; ?></td>
+							<td><?php echo $media; ?></td>
+							<td><?php echo $media; ?></td>
+						</tr>
+						<?php endforeach; ?>
+					</table>
+				</td>
+				<td>
+					<div id="chartContainer" style="height: 250px; width: 100%;"></div>
+					<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+				</td>
+			</tr>
+		</table>
+	<?php $conexion->close();?>
 </body>
 </html>  
