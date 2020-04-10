@@ -38,8 +38,8 @@
 		$row = mysqli_fetch_assoc($res);
 
 		for($i = 1; $i <= 3; $i++) {
-			$cod_prof = $_POST["profesor.$i"];
-			if($cod_prof != '0') {
+			$cod_prof = $_POST['profesor'.$i];
+			if($cod_prof != '0000') {
 				$id_doc = $row['id_doc'];
 				$edad = $_POST['edad'];
 				$sexo = $_POST['sexo'];
@@ -55,9 +55,11 @@
 				mysqli_query($conexion,"INSERT INTO encuesta(id_en,id_doc,edad,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) VALUES (NULL,$id_doc,$edad,$sexo,$curso_sup,$curso_inf,$n_matri,$n_exam,$interes,$tutoria,$dificultad,$calif,$asist)");
 
 				$consulta = $conexion->query("select id_en from encuesta order by id_en desc")or die ("Fallo consulta");
+
 				$fila = $consulta->fetch_assoc();
 				$id_en = $fila['id_en'];
 				$consulta = $conexion->query("Select cod_preg from pregunta");
+
 				$pre = 0;
 
 				while($fila = $consulta->fetch_assoc()) {
@@ -67,12 +69,18 @@
 
 					$profpreg = "pro".$i."pre".$pre;
 					$resp = $_POST[$profpreg];
+					//echo "$id_en, $cod_preg, $cod_prof, $resp";
+					//echo '    ';
 
 					// $profesorn = "profesor".$pro;
 					// $cod_prof = $_POST[$profesorn];
+					$insercion = "insert into respuesta (id_en,cod_preg,cod_prof,resp) values ($id_en,$cod_preg,"."'".$cod_prof."'".",$resp)";
+					//die(var_dump($insercion));
+					$resultado = $conexion->query($insercion);
+					//die(var_dump($resultado));
 
-					$conexion->query("insert into respuesta (id_en,cod_preg,cod_prof,resp) values ($id_en,$cod_preg,$cod_prof,$resp)");
 				}
+				echo "\n<br>";
 			}
 		}
 	}
@@ -253,7 +261,7 @@
 					$profesor = "profesor".$j;
 					echo "<select name=".$profesor.">";
 					if($j != 1)
-						echo "<option value=0>"."Ninguno"."</option>";
+						echo "<option value='0000'>"."Ninguno"."</option>";
 					while ($row = $query->fetch_assoc()) 
 					{
 						
