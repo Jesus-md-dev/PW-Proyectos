@@ -1,20 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset=utf-8>
 	<title>Resultados</title>
 </head>
 <body>
 	<?php
-		$dbhost = '127.0.0.1';
-		$dbuser = 'usuario';
-		$dbpass = '1234';
+	if(isset($_POST['codigo'])) {
+		$codigo = $_POST['codigo'];
+		$dbhost = 'localhost';
+		$dbuser = 'root';
+		$dbpass = 'root';
 		$db = 'p1';
-		$port = '3308';
+		$port = '8889';
 		$conexion = mysqli_connect($dbhost,$dbuser,$dbpass,$db,$port);
-		mysqli_close($conexion);
-		foreach ($_POST as $value) {
-			echo $value." ";
+		$resultado = $conexion->query("Select * from Profesor 
+			where Profesor.cod_prof like "."'".$codigo."'");
+		$val = $resultado->num_rows;
+		$resultado->close();
+		$conexion->close();
+		if($val == 0) {
+			echo "El código es incorrecto.";
+			echo "<form action ="."'"."Principal.php"."'"."method = "."'"."post"."'".">".
+				"<input type = "."'"."submit"."'"." value = "."'"."Volver"."'".">".
+				"</form>";
 		}
+		else {
+			echo "¡El código es correcto!";
+			// Resto del código
+			// ...
+		}
+	}
 	?>
 </body>
 </html>

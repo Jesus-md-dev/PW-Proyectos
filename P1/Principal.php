@@ -24,15 +24,14 @@
             echo "Introduce el código de profesor asociado: "; 
             /* Formulario en html:
             <form action ='Resultados.php' method = 'post'>
-            <input type = 'text' name = 'codigo' size = 4 maxlenght = 4>
-            <input type= 'submit' value= 'Aceptar'>
+                <input type = 'text' name = 'codigo' size = 4 maxlenght = 4>
+                <input type= 'submit' value= 'Aceptar'>
             </form>
             Equivalente en PHP: */
             echo "<form action ="."'"."Resultados.php"."'"."method = "."'"."post"."'".">".
                 "<input type = "."'"."text"."'"." name = "."'"."codigo"."'"." size = 4 maxlenght = 4>".
                 "<input type="."'"."submit"."'"." value="."'"."Aceptar"."'".">".
                 "</form>";
-            
         }
     }
     ?>
