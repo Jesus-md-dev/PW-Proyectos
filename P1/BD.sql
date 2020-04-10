@@ -41,11 +41,13 @@ CREATE TABLE ProfesorDocencia (
     foreign key(id_doc) references Docencia(id_doc),
     foreign key(cod_prof) references Profesor(cod_prof),
     primary key(id_doc, cod_prof)
-)
+);
 
 CREATE TABLE Pregunta (
     cod_preg integer auto_increment primary key,
-    enunciado varchar(200)
+    enunciado varchar(200),
+    indice integer,
+    subindice integer
 );
 
 CREATE TABLE Encuesta (
@@ -76,9 +78,9 @@ CREATE TABLE Respuesta (
     primary key(id_en,cod_preg,cod_prof)
 );
 
-insert into pregunta values(NULL,'Pregunta 1');
-insert into pregunta values(NULL,'Pregunta 2');
-insert into pregunta values(NULL,'Pregunta 3');
+insert into pregunta values(NULL,'Pregunta 1',0,0);
+insert into pregunta values(NULL,'Pregunta 2',0,0);
+insert into pregunta values(NULL,'Pregunta 3',0,0);
 
 insert into Titulacion values ('0001','Titulacion 1');
 insert into Asignatura values ('001','Asignatura 1');

@@ -75,7 +75,20 @@
 	$profesor = "0001";
 
 ?>
-
+<?php 
+	function estPregunta($pregunta,$conexion)
+	{
+		$busqueda = $conexion->query("select resp from respuesta where(cod_preg = $pregunta)");
+		$datos['num']=$busqueda->num_rows;
+		$datos['total'] = 0;
+		if($datos['num'] > 0):
+			while ($valor = $busqueda->fetch_assoc())
+				$datos['total'] += ($valor['resp']-1);
+		endif;
+		return $datos;
+			
+	}
+?>
 <?php
 
 	//*Docencia
@@ -93,73 +106,28 @@
 	$datos['cod_asig'] = $docrow['cod_asig'];
 	$datos['cod_grup'] = $docrow['cod_grup'];
 
-	$respQuery = "select * from respuesta";
-	$respres = $conexion->query($respQuery);
-	for($i=1;$i<=6;$i++)
-		$voto[$i] = 0;
-	while($resprow = $respres->fetch_assoc())
-		$voto[$resprow['resp']]++;
+	$respProfQuery = "select resp from respuesta where( resp != '0' )";
+	$resProf = $conexion->query($respProfQuery) or die("Fallo Profesor");
 
-	print_r($voto);
+	$nrespProfesor = $resProf->num_rows;
 
-	$vNS = array("y" => $voto["1"], "label" => "N.S.");
+	while($resProfrow = $resProf->fetch_assoc())
+		$vProfesor += ($resProfrow['resp']-1);
+	
+	$vProfesor /= $nrespProfesor;
+	
+	$mediaProfesor = array("y" => $vProfesor, "label" => "Profesor");
 	$v1 = array("y" => $voto["2"], "label" => "1");
 	$v2 = array("y" => $voto["3"], "label" => "2");
 	$v3 = array("y" => $voto["4"], "label" => "3");
 	$v4 = array("y" => $voto["5"], "label" => "4");
 	$v5 = array("y" => $voto["6"], "label" => "5");
 
-	print_r($v1);
+	$amediaProfesor = array();
 
-	$dataPoints = array();
-
-	for($i = 0; $i < $nopciones; $i++)
-	{
-		$array = array("y"=> "5", "label"=> "a");
-		array_push($dataPoints,$array);
-	}
-	print_r($dataPoints);
-
-?>
-
-<?php
-	if(!isset($atributo)):
-	//media
+	array_push($amediaProfesor,$mediaProfesor);
 
 	$media = 0;
-	for($i = 2; $i <= 6; $i++)
-	{
-		$media +=($valorOpcion[$i]*($i-1));
-	}
-
-	if($media != 0)
-		$media /= $nrespuestas;
-
-	$media = number_format($media,2);
-
-	//mediana
-	sort($vectorRespuestas);
-	$mediana = $vectorRespuestas[($nrespuestas/2)-1];
-
-	if(($nrespuestas%2)==0)
-	{
-		$mediana += $vectorRespuestas[($nrespuestas/2)];
-		if($mediana != 0)
-			$mediana /=2;
-	}
-
-	//moda
-	$moda = 0;
-	$nrepeticiones = 0;
-	for($i = 1; $i <= $nopciones; $i++)
-	{
-		if($valorOpcion[$i] > $nrepeticiones)
-		{
-			$moda = $i;
-			$nrepeticiones = $valorOpcion[$i];
-		}
-	}
-	endif;
 ?>
 
 <!DOCTYPE html>
@@ -186,7 +154,7 @@
 			animationEnabled: true,
 			theme: "light1",
 			data: [{
-				type: "bar",
+				type: "column",
 				showInLegend: "true",
 				indexLabelFontSize: 14,
 				indexLabel: "{y}",
@@ -194,7 +162,7 @@
 				indexLabelPlacement: "inside",
 				indexLabelFontColor: "#000000",
 				indexLabelFontWeight: "bolder",
-				dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+				dataPoints: <?php echo json_encode($amediaProfesor, JSON_NUMERIC_CHECK); ?>
 			}]
 		});
 		chart.render();
@@ -354,10 +322,15 @@
 							<td>
 								<?php 
 								echo $i.". ".$preg;
-								$i++; 
+								$i++;
+								$datos = estPregunta(array_search($preg, $vector['pregunta']),$conexion);
+								if($datos['total'] == 0)
+									$media = 0;
+								else
+									$media = $datos['total'] / $datos['num'];
 								?>
 							</td>
-							<td><?php echo $media; ?></td>
+							<td><?php echo $datos['num']; ?></td>
 							<td><?php echo $media; ?></td>
 							<td><?php echo $media; ?></td>
 						</tr>
