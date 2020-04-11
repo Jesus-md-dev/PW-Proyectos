@@ -46,8 +46,6 @@ CREATE TABLE ProfesorDocencia (
 CREATE TABLE Pregunta (
     cod_preg integer auto_increment primary key,
     enunciado varchar(200),
-    indice integer,
-    subindice integer
 );
 
 CREATE TABLE Encuesta (
@@ -83,7 +81,9 @@ insert into pregunta values(NULL,'Pregunta 2',0,0);
 insert into pregunta values(NULL,'Pregunta 3',0,0);
 
 insert into Titulacion values ('0001','Titulacion 1');
+insert into Titulacion values ('0002','Titulacion 2');
 insert into Asignatura values ('001','Asignatura 1');
+insert into Asignatura values ('002','Asignatura 2');
 insert into Grupo values ('01');
 insert into Grupo values ('02');
 
@@ -92,8 +92,12 @@ insert into Profesor values('0002','profesor 2',2);
 insert into Profesor values('0003','profesor 3',3);
 
 insert into docencia values(NULL,'0001','001','01');
+insert into docencia values(NULL,'0002','002','02');
 insert into docencia values(NULL,'0001','001','02');
+insert into docencia values(NULL,'0001','002','02');
 
-insert into ProfesorDocencia values('0001',1);
-insert into ProfesorDocencia values('0002',1);
-insert into ProfesorDocencia values('0003',2);
+insert into ProfesorDocencia values(1,'0001');
+insert into ProfesorDocencia values(2,'0001');
+insert into ProfesorDocencia values(2,'0002');
+insert into ProfesorDocencia values(3,'0003');
+insert into ProfesorDocencia values(4,'0001');

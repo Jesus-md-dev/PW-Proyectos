@@ -5,7 +5,7 @@
 	$dbpass = '';
 	$db = 'p1';
 	$port = '3308';
-	$conexion = new mysqli($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
+	$conexion = new mysqli($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor") or die ("fallo conexion");
 	$puedeMostrar = "false";
 	//Valores
 	$typeChart = $_POST['typeChart'];
@@ -20,6 +20,10 @@
 
 	$cProfesor = $_POST['cProfesor'];
 	$profesor = $_POST['profesor'];
+	if(isset($_POST['idprofesor']))
+		$profesor = $_POST['idprofesor'];
+	else
+		$adminMode = "true";
 
 	$cTitulacion = $_POST['cTitulacion'];
 	$titulacion = $_POST['titulacion'];
@@ -29,6 +33,27 @@
 
 	$cGrupo = $_POST['cGrupo'];
 	$grupo = $_POST['grupo'];
+
+	$query = $conexion->query("Select * from pregunta") or die("Fallo consulta preg");
+	while ($row = $query->fetch_assoc())
+		$vector['pregunta'][$row['cod_preg']] = $row['enunciado'];
+
+	$query = $conexion->query("Select * from profesor") or die("Fallo consulta prof");
+	while ($row = $query->fetch_assoc())
+		$vector['profesor'][$row['cod_prof']] = $row['nombre'];
+
+
+	$query = $conexion->query("Select * from titulacion") or die("Fallo consulta tit");
+	while ($row = $query->fetch_assoc())
+		$vector['titulacion'][$row['cod_tit']] = $row['nombre'];
+
+	$query = $conexion->query("Select * from asignatura") or die("Fallo consulta asig");
+	while ($row = $query->fetch_assoc())
+		$vector['asignatura'][$row['cod_asig']] = $row['nombre'];
+
+	$query = $conexion->query("Select * from grupo") or die("Fallo consulta gr");
+	while ($row = $query->fetch_assoc())
+		$vector['grupo'][$row['cod_grup']] = $row['cod_grup'];
 
 	$cEdad = $_POST['cEdad'];
 	$edad = $_POST['edad'];
@@ -156,11 +181,12 @@ if($cBuscar == "true"):
 	}
 
 	$name = "Pregunta: ".$nombrePregunta;
-
-	if($profesor != $valorNulo):
-		$resp = $conexion->query("select * from profesor where cod_prof = $profesor") or die ("Fallo Profesor");
-		$fila = $resp->fetch_assoc();
-		$name = $name." | Profesor: ".$fila['nombre'];
+	if($adminMode == "true"):
+		if($profesor != $valorNulo):
+			$resp = $conexion->query("select * from profesor where cod_prof = $profesor") or die ("Fallo Profesor");
+			$fila = $resp->fetch_assoc();
+			$name = $name." | Profesor: ".$fila['nombre'];
+		endif;
 	endif;
 
 	if($titulacion != $valorNulo):
@@ -196,42 +222,77 @@ if($cBuscar == "true"):
 		if($grupo != $valorNulo)
 			insertarWhere($wherecond,$where,$grupo,"cod_grup");
 		if($wherecond == "true")
-			$docQuery = $docQuery.$where.")";
-		
-		if($profesor != $valorNulo)
+			$aux = $docQuery.$where.")";
+
+		$res = $conexion->query($aux);
+		if($res->num_rows <=0)
 		{
-			$q = "select * from profesordocencia where (cod_prof = $profesor and id_doc in ($docQuery))";
-			$res = $conexion->query($q);
-			if($res->num_rows <= 0):
-				$puedeMostrar = "false";
-				$error = "El Profesor $profesor no pertenece a: <br>";
-				if($titulacion != $valorNulo):
-					$query = $conexion->query("Select * from titulacion where (cod_tit = $titulacion)") or die("Fallo consulta");
-					$row = $query->fetch_assoc();
-					$error = $error."<br>-Titulación: $row[nombre] ";
-				endif;
-				if($asignatura != $valorNulo):
-					$query = $conexion->query("Select * from asignatura where (cod_asig = $asignatura)") or die("Fallo consulta");
-					$row = $query->fetch_assoc();
-					$error = $error."<br>-Asignatura: $row[nombre] ";
-				endif;
-				if($grupo != $valorNulo)
-					$error = $error."<br>-Grupo: $grupo ";
-			endif;			
+			$error =  "No existe";
+			if($titulacion != $valorNulo)
+				$error = $error." la Titulación ".$vector['titulacion'][$titulacion];
+			if($asignatura != $valorNulo)
+				$error = $error." con Asignatura ".$vector['asignatura'][$asignatura];
+			if($grupo != $valorNulo)
+				$error = $error ." y grupo $grupo.";
+			
+			$puedeMostrar = "false";
+		}
+		else
+		{
+			if($profesor != $valorNulo)
+			{
+				$q = "select * from profesordocencia where (cod_prof = $profesor and id_doc in ($aux))";
+				$res = $conexion->query($q);
+				if($res->num_rows <= 0)
+				{
+					$puedeMostrar = "false";
+					$error = "El Profesor $profesor no pertenece a: <br>";
+					if($titulacion != $valorNulo):
+						$query = $conexion->query("Select * from titulacion where (cod_tit = $titulacion)") or die("Fallo consulta");
+						$row = $query->fetch_assoc();
+						$error = $error."<br>-Titulación: $row[nombre] ";
+					endif;
+					if($asignatura != $valorNulo):
+						$query = $conexion->query("Select * from asignatura where (cod_asig = $asignatura)") or die("Fallo consulta");
+						$row = $query->fetch_assoc();
+						$error = $error."<br>-Asignatura: $row[nombre] ";
+					endif;
+					if($grupo != $valorNulo)
+						$error = $error."<br>-Grupo: $grupo ";
+				}
+			}
 		}
 	}
+	if($profesor != $valorNulo)
+	{
+		if(!isset($atributo))
+			$docQuery = $aux;
+		else
+		{
+			$QDocencia = "true";
+			if($wherecond == "true")
+				$docQuery = $docQuery.$where." and ";
+			else
+				$docQuery = $docQuery.$where;
+			$docQuery = $docQuery."id_doc in (select id_doc from profesordocencia where(cod_prof = $profesor)))";
+		}
+	}
+	else
+		$docQuery = $aux;
+
 
 	//Docencia
 
 	//*Encuesta
+
 	if(!isset($atributo))
 		$select = "id_en";
 	else
 		$select = $nTipo[$atributo];
-	$tabla = "Encuesta";$where = " where(";$wherecond = "false";
+	$tabla = "encuesta";$where = " where(";$wherecond = "false";
 	$id_enQuery = "select ".$select." from ".$tabla;
 
-	if($edad!=$valorNulo || $sexo!=$valorNulo || $alto != $valorNulo || $bajo != $valorNulo || $matriculado != $valorNulo || $examinado != $valorNulo  || $interes != $valorNulo || $tutorias != $valorNulo || $dificultad != $valorNulo || $calificacion != $valorNulo || $asistencia != $valorNulo || $QDocencia == "true")
+	if($edad != $valorNulo || $sexo != $valorNulo || $alto != $valorNulo || $bajo != $valorNulo || $matriculado != $valorNulo || $examinado != $valorNulo  || $interes != $valorNulo || $tutorias != $valorNulo || $dificultad != $valorNulo || $calificacion != $valorNulo || $asistencia != $valorNulo || $QDocencia == "true")
 	{
 		$QEncuesta = "true";
 		if($edad!=$valorNulo)
@@ -273,6 +334,7 @@ if($cBuscar == "true"):
 			else
 				$wherecond = "true";
 			$where = $where."id_doc in (".$docQuery.")";
+		
 		endif;
 		if($wherecond == "true")
 			$id_enQuery = $id_enQuery.$where.")";
@@ -304,13 +366,13 @@ if($cBuscar == "true"):
 
 		if($wherecond == "true")
 			$Query = $Query.$where.")";
-		echo $Query;
-		$respuestas = $conexion->query("$Query") ;//or die("Fallo respuestas");
+
+		$respuestas = $conexion->query("$Query") or die("Fallo respuestas Query");
 		$nindice = "resp";
 	}
 	else
 	{
-		$respuestas = $conexion->query("$id_enQuery");
+		$respuestas = $conexion->query("$id_enQuery") or die("Fallo respuestas id_enQuery");
 		$nindice = $nTipo[$atributo];
 	}
 
@@ -355,8 +417,7 @@ if($cBuscar == "true"):
 		$array = array("y"=> $valorOpcion[$i], "label"=> $vectorLabel[$i]);
 		array_push($dataPoints,$array);
 	}
-	echo "<br>";
-	print_r($dataPoints);
+
 endif;
 
 	//echo "Docencia: ".$docQuery."<br>";
@@ -388,18 +449,6 @@ endif;
 		$mediana += $vectorRespuestas[($nrespuestas/2)];
 		if($mediana != 0)
 			$mediana /=2;
-	}
-
-	//moda
-	$moda = 0;
-	$nrepeticiones = 0;
-	for($i = 1; $i <= $nopciones; $i++)
-	{
-		if($valorOpcion[$i] > $nrepeticiones)
-		{
-			$moda = $i;
-			$nrepeticiones = $valorOpcion[$i];
-		}
 	}
 	endif;
 ?>
@@ -455,11 +504,24 @@ endif;
 </head>
 
 <body>
+<form method="post" action="">
+		<input type="submit" value="Volver al Inicio">
+</form>
+<?php if($adminMode != "true"): ?>
+<form method="post" action="Resultados.php">
+	<input type="hidden" name="idprofesor" value=<?php echo $profesor; ?>>
+	<input type="submit" value="Ir a Resultados Personalizados">
+</form>
+<?php endif; ?>
 <div>
 	<h1 align = center>Resultados de las Encuestas</h1>
 	<div class="column">
 		
 		<form action="ResPersonalizado.php" method="post">
+			<?php if($adminMode != "true"): ?>
+				<h1>Profesor: <?php echo $vector['profesor'][$profesor] ?></h1>
+				<input type="hidden" name="idprofesor" value=<?php echo $profesor; ?>>
+			<?php endif; ?>
 			<h2>Opciones:</h2>
 			Tipo de gráfico: 
 			<select name=typeChart>;
@@ -470,7 +532,7 @@ endif;
 			<br>
 
 			<h3>Filtros:</h3>
-			<!--<input type="checkbox" name="cPregunta" value="true">-->
+
 			&#10033;Pregunta: <select name=pregunta>
 			<option value="-1">Todas</option>
 			<?php 
@@ -482,8 +544,7 @@ endif;
 			?>
 			</select>
 			<br>
-
-			<!--<input type="checkbox" name="cProfesor" value="true">-->
+			<?php if($adminMode == "true"): ?>
 			&#10033;Profesor: <select name=profesor>
 			<?php 
 			$query = $conexion->query("Select * from profesor") or die("Fallo consulta");
@@ -494,8 +555,7 @@ endif;
 			?>
 			</select>
 			<br>
-
-			<!--<input type="checkbox" name="cTitulacion" value="true">-->
+			<?php endif; ?>
 			&#10033;Titulación: <select name=titulacion>
 			<?php 
 			$query = $conexion->query("Select * from titulacion") or die("Fallo consulta");
@@ -507,7 +567,6 @@ endif;
 			</select>
 			<br>
 
-			<!--<input type="checkbox" name="cAsignatura" value="true">-->
 			&#10033;Asignatura: <select name=asignatura>
 			<?php 
 			$query = $conexion->query("Select * from asignatura") or die("Fallo consulta");
@@ -519,7 +578,6 @@ endif;
 			</select>
 			<br>
 
-			<!--<input type="checkbox" name="cGrupo" value="true">-->
 			&#10033;Grupo: <select name=grupo>
 			<?php 
 			$query = $conexion->query("Select * from grupo") or die("Fallo consulta");
@@ -546,6 +604,7 @@ endif;
 			selectContent("Asistencia","asistencia",$vector['asistencia']);
 
 			?>
+
 			<input type="submit" name="Buscar" value="Buscar">
 			<br>
 			<i>&nbsp;&nbsp;*Marcar una opción para mostrar la gráfica de ese atributo.</i>
@@ -560,12 +619,11 @@ endif;
 		<?php if(!isset($atributo)): ?>
 		<h3 align="center">Media: <?php echo $media; ?></h3>
 		<h3 align="center">Mediana: <?php echo $mediana; ?></h3>
-		<h3 align="center">Moda: <?php echo $moda; ?></h3>
 		<?php endif; ?>
 	<?php endif;
 	if($puedeMostrar == "false"):
 	?>
-	<h2><?php echo $error; ?></h1>
+	<h2><?php echo $error; ?></h2>
 	<?php
 	endif;
 
