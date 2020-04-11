@@ -76,6 +76,14 @@ CREATE TABLE Respuesta (
     primary key(id_en,cod_preg,cod_prof)
 );
 
+CREATE TABLE Administrador (
+  	cod_admin varchar(4) DEFAULT NULL,
+  	contra_admin varchar(16) DEFAULT NULL
+);
+
+INSERT INTO Administrador (cod_admin, contra_admin) VALUES('0001', '1234'),('1111', 'hola');
+
+
 insert into pregunta values(NULL,'Pregunta 1',0,0);
 insert into pregunta values(NULL,'Pregunta 2',0,0);
 insert into pregunta values(NULL,'Pregunta 3',0,0);

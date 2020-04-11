@@ -459,15 +459,6 @@ endif;
 	<title>Resultados</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<style>
-
-	.column {
-	  float: left;
-	  width: 50%;
-	}
-
-	</style>
-
 	<script>
 
 		window.onload = function () {
@@ -500,17 +491,23 @@ endif;
 			text-shadow: 1px white;
 			font-family: Helvetica;
 		}
+		.column {
+		  float: left;
+		  width: 50%;
+		}
+
 	</style>
+
 </head>
 
 <body>
-<form method="post" action="">
+<form method="post" action="Principal.php">
 		<input type="submit" value="Volver al Inicio">
 </form>
 <?php if($adminMode != "true"): ?>
 <form method="post" action="Resultados.php">
 	<input type="hidden" name="idprofesor" value=<?php echo $profesor; ?>>
-	<input type="submit" value="Ir a Resultados Personalizados">
+	<input type="submit" value="Volver al Informe">
 </form>
 <?php endif; ?>
 <div>

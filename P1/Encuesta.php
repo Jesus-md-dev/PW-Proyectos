@@ -2,45 +2,110 @@
 <html>
 <head>
 	<meta charset=utf-8>
+	<style type="text/css">
+		body{
+			background: lightyellow;
+			color: black;
+			text-shadow: 1px white;
+			font-family: Helvetica;
+		}
+		input[type="submit"] 
+		{
+    		width: 110px;
+   		}
+	</style>
 	<title>Encuesta ESI</title>
 </head>
 <body>
+	<?php /* DEFINICION DE FUNCIONES */	
+
+	// Devuelve el nombre del campo a partir del nombre en POST
+	function nombreCampo($nombre) {
+		switch ($nombre) {
+			case 'calto': return 'curso más alto'; break;
+			case 'cbajo': return 'curso más bajo'; break;
+			case 'vmat': return 'veces matriculado'; break;
+			case 'vexaminado': return 'veces examinado'; break;
+			case 'interes': return 'interés en la asignatura'; break;
+			case 'tutoria': return 'uso de tutorías'; break;
+			case 'calificacion': return 'calificación esperada'; break;
+			default: return $nombre; break;
+		}
+	}
+
+	// Devuelve la conexión con la base de datos que se pase
+	function conectarBD($direccion = 'localhost', $usuario = 'root', 
+			$contra = '', $nombreBD = 'p1', $puerto = '3308') {
+		return new mysqli($direccion, $usuario, $contra, $nombreBD, $puerto);
+	}
+
+	// Devuelve una conexión según el servidor que se use, con datos predefinidos
+	function conexionSegunServidor($tipoServer = 'WAMP') {
+		if ($tipoServer == 'MAMP')
+			return conectarBD('localhost', 'root', 'root', 'p1', '8889');
+		return conectarBD();
+	}
+
+	// Devuelve los campos no rellenos. Si no hay errores, devuelve NULL
+	function mostrarCamposVacios() {
+		$valoresEncuesta = array('edad', 'sexo', 'calto', 'cbajo', 'vmat', 'vexaminado',
+			'interes', 'tutoria', 'dificultad', 'calificacion', 'asistencia');
+		$mostrado = false;
+		foreach($valoresEncuesta as $campo) {
+			if(!isset($_POST[$campo])) {
+				echo "El campo ".nombreCampo($campo)." es obligatorio.\n<br>";
+				$mostrado = true;
+			}
+		}
+		return $mostrado;
+	}
+
+	// Muestra un botón para volver a Principal.php.
+	function mostrarInicio() {
+		echo "<form action = \"Principal.php\" method = \"post\"> \n";
+		echo "	<input type = \"submit\" value = \"Inicio\">\n";
+		echo "</form>";
+	}
+	/*------------------------------------------------*/ ?>
+
 	<?php
-	$dbhost = '127.0.0.1';
-	$dbuser = 'root';
-	$dbpass = '';
-	$db = 'p1';
-	$port = '3308';
-	$conexion = new mysqli($dbhost,$dbuser,$dbpass,$db,$port) or die ("No se pudo establecer conexion con el servidor");
-	$color = $_POST['color'];
-	if(isset($color)){
-		if($_POST['color']=="Dark")
-		{
+	/* COMPROBACIÓN DE LAS PRECONDICIONES */
+
+	// Se ha accedido desde inicio:
+	if(!isset($_POST['Acceder'])) {
+		echo "<h1>Ocurrió un error</h1>";
+		echo "Volver a la página inicial: <br><br>";
+		mostrarInicio(!isset($_POST['Acceder']));
+		return;
+	}
+
+	// Se ha solicitado modo oscuro o claro:
+	if(isset($_POST['color'])){
+		if($_POST['color']=="Oscuro") {
 			echo "<body bgcolor=black>";
 			echo "<font color=white>";
 		}
-		else
-		{
+		else {
 			echo "<body bgcolor=white>";
 			echo "<font color=black>";
 		}
 	}
-	$dbhost = '127.0.0.1';
-	$dbuser = 'root';
-	$dbpass = '';
-	$db = 'p1';
-	$port = '3308';
-	if(isset($_POST['asistencia']))
-	{
-		$conexion = new mysqli($dbhost, $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
+
+	// Iniciamos la conexión con la base de datos:
+	$conexion = conexionSegunServidor();
+
+	// Se ha enviado un intento de encuesta: 
+	if(isset($_POST['enviar']) && !mostrarCamposVacios()):
+		// Valores titulacion, asignatura y grupo
 		$cod_tit = $_POST['titulacion'];
 		$cod_asig = $_POST['asignatura'];
 		$cod_grup = $_POST['grupo'];
 
-		$res = mysqli_query($conexion,"select * from docencia where (cod_tit=$cod_tit and cod_grup = $cod_grup and cod_asig = $cod_asig)") or die("Fallo consulta") or die ("Fallo docencia");
-		$row = mysqli_fetch_assoc($res);
+		// Consultamos los profesores de la asignatura, titulacion y grupo seleccionados
+		$row = $conexion->query("select * from docencia 
+			where (cod_tit = $cod_tit and cod_grup = $cod_grup and cod_asig = $cod_asig)")->fetch_assoc();
 
-		$cod_prof = '0001';
+		// El resto de valores de la encuesta personal
 		$id_doc = $row['id_doc'];
 		$edad = $_POST['edad'];
 		$sexo = $_POST['sexo'];
@@ -53,34 +118,60 @@
 		$dificultad = $_POST['dificultad'];
 		$calif = $_POST['calificacion'];
 		$asist = $_POST['asistencia'];
-		mysqli_query($conexion,"INSERT INTO encuesta(id_en,id_doc,edad,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) VALUES (NULL,$id_doc,$edad,$sexo,$curso_sup,$curso_inf,$n_matri,$n_exam,$interes,$tutoria,$dificultad,$calif,$asist)");
 
-		$consulta = $conexion->query("select id_en from encuesta order by id_en desc")or die ("Fallo consulta");
-		$fila = $consulta->fetch_assoc();
-		$id_en = $fila['id_en'];
-		$consulta = $conexion->query("Select cod_preg from pregunta");
-		$pro = 1;
-		$pre = 0;
+		// Insertamos los valores en la tabla encuesta
+		$conexion->query("INSERT INTO 
+			encuesta(id_en,id_doc,edad,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) 
+			VALUES(NULL,$id_doc,$edad,$sexo,$curso_sup,$curso_inf,$n_matri,$n_exam,$interes,$tutoria,$dificultad,$calif,$asist)");
 
-		while($fila = $consulta->fetch_assoc()):
-		
-			$pre++;
-			$cod_preg = $fila['cod_preg'];
+		// Consultamos para seleccionar el id de la encuesta más alto: el que acabamos de insertar
+		$id_en = $conexion->query("select id_en from encuesta order by id_en desc")->fetch_assoc()['id_en'];
 
-			$profpreg = "pro".$pro."pre".$pre;
-			$resp = $_POST[$profpreg];
+		// Hacemos un bucle: una iteracion por cada profesor
+		for($i = 1; $i <= 3; $i++) {
+			$cod_prof = $_POST['profesor'.$i];
+			// Comprobamos que se ha insertado un profesor
+			if($cod_prof != '0000') {
+				$consulta = $conexion->query("Select cod_preg from pregunta");
+				$pre = 0;
+				while($fila = $consulta->fetch_assoc()) {
 
-			$profesorn = "profesor".$pro;
-			$cod_prof = $_POST[$profesorn];
+					$pre++;
+					$cod_preg = $fila['cod_preg'];
 
-			$conexion->query("insert into respuesta (id_en,cod_preg,cod_prof,resp) values ($id_en,$cod_preg,$cod_prof,$resp)");
-		endwhile;
-	}
+					// Profesor x, Pregunta y
+					$resp = $_POST["pro".$i."pre".$pre]; 
+
+					// Insertamos cada respuesta y la relacionamos con profesor
+					$conexion->query("insert into respuesta (id_en,cod_preg,cod_prof,resp) 
+						values ($id_en,$cod_preg,"."'".$cod_prof."'".",$resp)");
+				}
+			}
+		}
 	?>
-	<form action = "<?php $_PHP_SELF ?>" method = "post"> 
-		<input type = "submit" name = "color" value = "Dark">
-		<input type = "submit" name = "color" value = "Light">
+	<!-- Mostramos un agradecimiento al completar la encuesta satisfactoriamente -->
+	<h1> Gracias por rellenar la encuesta. </h1>
+	Selecciona Inicio para volver a la página inicial.<br><br>
+	<?php // Mostramos Inicio, cerramos la conexión y finalizamos la ejecución:
+	mostrarInicio();
+	$conexion->close();
+	return;
+	endif; 
+	?>
+	<!-- FIN COMPROBACIÓN DE CONDICIONES -->
+
+
+	<!-- PÁGINA PRINCIPAL: ENCUESTA -->
+
+	<!-- Cabecera: Botones de inicio, oscuro y claro -->
+	<?php mostrarInicio() ?>
+	<form action = "<?php $_PHP_SELF ?>" method = "post">
+		<input type = "submit" name = "color" value = "Oscuro">
+		<input type = "submit" name = "color" value = "Claro">
+		<input type = 'hidden' name = 'Acceder' value = 'Acceder'>
 	</form>
+
+	<!-- Encuesta principal: código de asignatura -->
 	<form method=post action = "<?php $_PHP_SELF ?>">
 		<table align=center border = 1>
 			<tr align=center>
@@ -89,11 +180,10 @@
 				</td>
 			</tr>
 			<tr align=center>
-				<td>Titulacion:</td>
-				<td>Asignatura:</td>
-				<td>Grupo:</td>
+				<td>Titulacion</td>
+				<td>Asignatura</td>
+				<td>Grupo</td>
 			</tr>
-	
 			<tr align=center>
 			<?php
 			for($j = 0;$j < 3;$j++):
@@ -112,9 +202,8 @@
 				$res = $conexion->query("SELECT * FROM Grupo") or die ("Fallo consulta tabla");
 				$nombre = 'grupo';
 			}
-
 			?>
-					<td>
+			<td>
 			<?php echo "<select name=$nombre>"; ?>
 				<?php
 				while($row = $res->fetch_assoc())
@@ -128,10 +217,12 @@
 				}
 				?>
 			</select>
-					</td>
+			</td>
 			<?php endfor;?>
 			</tr>
 		</table>
+	
+		<!-- Encuesta principal: Información personal -->
 		<br>
 		<table border="1" align="center">
 			<tr>
@@ -227,6 +318,8 @@
 				</td>
 			</tr>
 		</table>
+
+		<!-- Encuesta  principal: Profesores y preguntas -->
 		<br>
 		<?php
 		$res = mysqli_query($conexion,"SELECT * FROM pregunta") or die ("Fallo consulta tabla");
@@ -252,6 +345,8 @@
 					echo "<td>";
 					$profesor = "profesor".$j;
 					echo "<select name=".$profesor.">";
+					if($j != 1)
+						echo "<option value='0000'>"."Ninguno"."</option>";
 					while ($row = $query->fetch_assoc()) 
 					{
 						
@@ -272,7 +367,7 @@
 					echo "<td>";
 						echo $i.". ".$row['enunciado']."<br>";
 					echo "</td>";
-					for($j = 1; $j <= 3; $j++){
+					for($j = 1; $j <= 3; $j++) {
 						echo "<td  width=210>";
 						$n = "pro".$j."pre".$i;
 						echo "<input type=radio name=$n value=1 checked>NS";
@@ -289,7 +384,11 @@
 			?>
 		</table>
 		<br>
-		<input type="submit" class="center-block" value="Enviar Encuesta">
+		<input type='hidden' name = 'Acceder' value='Acceder'>
+		<input type="submit" name = 'enviar' value="Enviar Encuesta">
 	</form>
+	
+	<!-- Cerramos la conexión abierta para consultar las pregutas -->
+	<?php $conexion->close(); ?>
 </body>
 </html>

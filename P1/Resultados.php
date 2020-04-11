@@ -72,7 +72,7 @@
 	$valorNulo = "0";
 	$unAtributo = "global";
 
-	$profesor = "0001";
+	$profesor = $_POST['idprofesor'];
 
 ?>
 <?php 
@@ -251,7 +251,6 @@
 		body{
 			background: lightyellow;
 			color: black;
-			text-shadow: 1px white;
 			font-family: Helvetica;
 		}
 
@@ -280,7 +279,7 @@
 </head>
 
 <body>
-	<form method="post" action="">
+	<form method="post" action="Principal.php">
 		<input type="submit" value="Volver al Inicio">
 	</form>
 	<form method="post" action="ResPersonalizado.php">
@@ -336,6 +335,7 @@
 						</select>
 						<br>
 						<input type="submit" name="actualizar" value="Actualizar">
+						<input type="hidden" name="idprofesor" value=<?php echo $profesor; ?>>
 					</form>
 				</td>
 			</tr>
