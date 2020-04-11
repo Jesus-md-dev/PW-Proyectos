@@ -2,10 +2,28 @@
 <html>
 <head>
 	<meta charset=utf-8>
+	<style>
+	input[type="submit"] {
+    width: 100px;
+    height: 100px;}
+	</style>
 	<title>Encuesta ESI</title>
 </head>
 <body>
 	<?php
+	function nombreCampo($nombre) {
+		switch ($nombre) {
+			case 'calto': return 'curso más alto'; break;
+			case 'cbajo': return 'curso más bajo'; break;
+			case 'vmat': return 'veces matriculado'; break;
+			case 'vexaminado': return 'veces examinado'; break;
+			case 'interes': return 'interés en la asignatura'; break;
+			case 'tutoria': return 'uso de tutorías'; break;
+			case 'calificacion': return 'calificación esperada'; break;
+			default: return $nombre; break;
+		}
+	}
+	$encuestaRellena = false;
 	$dbhost = 'localhost';
 	$dbuser = 'root';
 	$dbpass = 'root';
@@ -15,21 +33,28 @@
 	$color = $_POST['color'];
 
 	if(isset($color)){
-		if($_POST['color']=="Dark")
-		{
+		if($_POST['color']=="Oscuro") {
 			echo "<body bgcolor=black>";
 			echo "<font color=white>";
 		}
-		else
-		{
+		else {
 			echo "<body bgcolor=white>";
 			echo "<font color=black>";
 		}
 	}
 
-	if(isset($_POST['asistencia']))
-	{
-		$conexion = new mysqli($dbhost, $dbuser, $dbpass, $db, $port) or die ("No se pudo establecer conexion con el servidor");
+	$valoresEncuesta = array('edad', 'sexo', 'calto', 'cbajo', 'vmat', 'vexaminado',
+		'interes', 'tutoria', 'dificultad', 'calificacion', 'asistencia');
+	if(isset($_POST['enviar'])) {
+		$encuestaRellena = true;
+		foreach($valoresEncuesta as $campo) {
+			if(!isset($_POST[$campo])) {
+				echo "El campo ".nombreCampo($campo)." es obligatorio.\n<br>";
+				$encuestaRellena = False;
+			}
+		}
+	}
+	if($encuestaRellena):
 		$cod_tit = $_POST['titulacion'];
 		$cod_asig = $_POST['asignatura'];
 		$cod_grup = $_POST['grupo'];
@@ -37,31 +62,30 @@
 		$res = mysqli_query($conexion,"select * from docencia where (cod_tit=$cod_tit and cod_grup = $cod_grup and cod_asig = $cod_asig)") or die("Fallo consulta") or die ("Fallo docencia");
 		$row = mysqli_fetch_assoc($res);
 
+		$id_doc = $row['id_doc'];
+		$edad = $_POST['edad'];
+		$sexo = $_POST['sexo'];
+		$curso_sup = $_POST['calto'];
+		$curso_inf = $_POST['cbajo'];
+		$n_matri = $_POST['vmat'];
+		$n_exam = $_POST['vexaminado'];
+		$interes = $_POST['interes'];
+		$tutoria = $_POST['tutoria'];
+		$dificultad = $_POST['dificultad'];
+		$calif = $_POST['calificacion'];
+		$asist = $_POST['asistencia'];
+		mysqli_query($conexion,"INSERT INTO encuesta(id_en,id_doc,edad,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) VALUES (NULL,$id_doc,$edad,$sexo,$curso_sup,$curso_inf,$n_matri,$n_exam,$interes,$tutoria,$dificultad,$calif,$asist)");
+
+		$consulta = $conexion->query("select id_en from encuesta order by id_en desc")or die ("Fallo consulta");
+
+		$fila = $consulta->fetch_assoc();
+		$id_en = $fila['id_en'];
+
 		for($i = 1; $i <= 3; $i++) {
 			$cod_prof = $_POST['profesor'.$i];
 			if($cod_prof != '0000') {
-				$id_doc = $row['id_doc'];
-				$edad = $_POST['edad'];
-				$sexo = $_POST['sexo'];
-				$curso_sup = $_POST['calto'];
-				$curso_inf = $_POST['cbajo'];
-				$n_matri = $_POST['vmat'];
-				$n_exam = $_POST['vexaminado'];
-				$interes = $_POST['interes'];
-				$tutoria = $_POST['tutoria'];
-				$dificultad = $_POST['dificultad'];
-				$calif = $_POST['calificacion'];
-				$asist = $_POST['asistencia'];
-				mysqli_query($conexion,"INSERT INTO encuesta(id_en,id_doc,edad,sexo,curso_sup,curso_inf,n_matri,n_exam,interes,tutorias,dificultad,calif,asist) VALUES (NULL,$id_doc,$edad,$sexo,$curso_sup,$curso_inf,$n_matri,$n_exam,$interes,$tutoria,$dificultad,$calif,$asist)");
-
-				$consulta = $conexion->query("select id_en from encuesta order by id_en desc")or die ("Fallo consulta");
-
-				$fila = $consulta->fetch_assoc();
-				$id_en = $fila['id_en'];
 				$consulta = $conexion->query("Select cod_preg from pregunta");
-
 				$pre = 0;
-
 				while($fila = $consulta->fetch_assoc()) {
 				
 					$pre++;
@@ -75,19 +99,25 @@
 					// $profesorn = "profesor".$pro;
 					// $cod_prof = $_POST[$profesorn];
 					$insercion = "insert into respuesta (id_en,cod_preg,cod_prof,resp) values ($id_en,$cod_preg,"."'".$cod_prof."'".",$resp)";
-					//die(var_dump($insercion));
-					$resultado = $conexion->query($insercion);
-					//die(var_dump($resultado));
-
+					$conexion->query($insercion);
 				}
-				echo "\n<br>";
 			}
 		}
-	}
 	?>
+	<h1> Gracias por rellenar la encuesta </h1>
+	Selecciona Inicio para volver a la página inicial<br><br>
+	<form action = "Principal.php" method = "post"> 
+		<input type = "submit" value = "Inicio">
+	</form>
+	<?php endif; ?>
+
+	<?php if(!$encuestaRellena): ?>
+	<form action = "Principal.php" method = "post"> 
+		<input type = "submit" value = "Inicio">
+	</form>
 	<form action = "<?php $_PHP_SELF ?>" method = "post"> 
-		<input type = "submit" name = "color" value = "Dark">
-		<input type = "submit" name = "color" value = "Light">
+		<input type = "submit" name = "color" value = "Oscuro">
+		<input type = "submit" name = "color" value = "Claro">
 	</form>
 	<form method=post action = "<?php $_PHP_SELF ?>">
 		<table align=center border = 1>
@@ -285,12 +315,12 @@
 					for($j = 1; $j <= 3; $j++){
 						echo "<td  width=210>";
 						$n = "pro".$j."pre".$i;
-						echo "<input type=radio name=$n value=0 checked>NS";
-						echo "<input type=radio name=$n value=1>1";
-						echo "<input type=radio name=$n value=2>2";
-						echo "<input type=radio name=$n value=3>3";
-						echo "<input type=radio name=$n value=4>4";
-						echo "<input type=radio name=$n value=5>5";
+						echo "<input type=radio name=$n value=1 checked>NS";
+						echo "<input type=radio name=$n value=2>1";
+						echo "<input type=radio name=$n value=3>2";
+						echo "<input type=radio name=$n value=4>3";
+						echo "<input type=radio name=$n value=5>4";
+						echo "<input type=radio name=$n value=6>5";
 						echo "</td>";
 					}
 				echo "</tr>";
@@ -299,7 +329,11 @@
 			?>
 		</table>
 		<br>
-		<input type="submit" class="center-block" value="Enviar Encuesta">
+		<input type="submit" name = 'enviar' value="Enviar Encuesta">
 	</form>
+	 <?php 
+	 endif;
+	 $conexion->close();
+	 ?>
 </body>
 </html>
