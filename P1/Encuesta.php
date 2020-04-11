@@ -79,18 +79,6 @@
 		return;
 	}
 
-	// Se ha solicitado modo oscuro o claro:
-	if(isset($_POST['color'])){
-		if($_POST['color']=="Oscuro") {
-			echo "<body bgcolor=black>";
-			echo "<font color=white>";
-		}
-		else {
-			echo "<body bgcolor=white>";
-			echo "<font color=black>";
-		}
-	}
-
 	// Iniciamos la conexión con la base de datos:
 	$conexion = conexionSegunServidor();
 
@@ -166,8 +154,6 @@
 	<!-- Cabecera: Botones de inicio, oscuro y claro -->
 	<?php mostrarInicio() ?>
 	<form action = "<?php $_PHP_SELF ?>" method = "post">
-		<input type = "submit" name = "color" value = "Oscuro">
-		<input type = "submit" name = "color" value = "Claro">
 		<input type = 'hidden' name = 'Acceder' value = 'Acceder'>
 	</form>
 
