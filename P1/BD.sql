@@ -6,7 +6,7 @@ USE p1;
 
 CREATE TABLE Asignatura (
     cod_asig varchar(3) primary key,
-    nombre varchar(30)
+    nombre varchar(50)
 );
 
 CREATE TABLE Titulacion (
@@ -16,8 +16,7 @@ CREATE TABLE Titulacion (
 
 CREATE TABLE Profesor (
     cod_prof varchar(4) primary key,
-    nombre varchar(50),
-    telefono varchar(9)
+    nombre varchar(50)
 );
 
 CREATE TABLE Grupo (
