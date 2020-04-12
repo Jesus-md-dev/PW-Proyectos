@@ -405,10 +405,25 @@ if($cBuscar == "true"):
 		$valorOpcion[$i] = 0;
 	}
 
-	while($respFila = $respuestas->fetch_assoc()):
-		$vectorRespuestas[] = $respFila[$nindice];
-		$valorOpcion[$respFila[$nindice]]++;
-	endwhile;
+	if(isset($atributo))
+	{
+		while($respFila = $respuestas->fetch_assoc()):
+			$vectorRespuestas[] = ($respFila[$nindice]-1);
+			$valorOpcion[$respFila[$nindice]]++;
+		endwhile;
+	}
+	else
+	{
+		$nrespuestas = 0;
+		while($respFila = $respuestas->fetch_assoc()):
+			if($respFila[$nindice]-1 != 0)
+			{
+				$vectorRespuestas[] = ($respFila[$nindice]-1);
+				$nrespuestas++;
+			}
+			$valorOpcion[$respFila[$nindice]]++;
+		endwhile;
+	}
 
 	$dataPoints = array();
 
@@ -442,14 +457,25 @@ endif;
 
 	//mediana
 	sort($vectorRespuestas);
+	print_r($vectorRespuestas);
 	$mediana = $vectorRespuestas[($nrespuestas/2)-1];
 
 	if(($nrespuestas%2)==0)
 	{
-		$mediana += $vectorRespuestas[($nrespuestas/2)];
+		$mediana += $vectorRespuestas[$nrespuestas/2];
 		if($mediana != 0)
 			$mediana /=2;
 	}
+
+	foreach ($vectorRespuestas as $v) {
+		$desTipica += pow($v - $media,2);
+	}
+	if($desTipica != 0)
+	{
+		$desTipica = sqrt($desTipica/$nrespuestas);
+		$desTipica = number_format($desTipica,2);
+	}
+
 	endif;
 ?>
 
@@ -616,6 +642,7 @@ endif;
 		<?php if(!isset($atributo)): ?>
 		<h3 align="center">Media: <?php echo $media; ?></h3>
 		<h3 align="center">Mediana: <?php echo $mediana; ?></h3>
+		<h3 align="center">Desviación Típica <?php echo $desTipica; ?> </h3>
 		<?php endif; ?>
 	<?php endif;
 	if($puedeMostrar == "false"):
